@@ -1,0 +1,4 @@
+app:
+  name: 'hero_rider_chat'
+telegram:
+  endpoint: 'https://api.telegram.org/bot'
