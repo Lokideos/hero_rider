@@ -9,7 +9,7 @@ puts '* Started'
 puts 'Use Ctrl-C to stop'
 
 begin
-  loop { sleep 3 }
+  loop { Chat.interaction }
 rescue Interrupt
   puts '- Stopped successfully'
 end
