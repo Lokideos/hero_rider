@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+puts "Application starting..."
+
+require_relative '../config/environment'
+
+puts "* Environment: #{Application.environment}"
+puts '* Started'
+puts 'Use Ctrl-C to stop'
+
+begin
+  loop { sleep 3 }
+rescue Interrupt
+  puts '- Stopped successfully'
+end
