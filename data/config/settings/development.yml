@@ -1,0 +1,5 @@
+redis:
+  host: ''
+  port: ''
+  db: '2'
+  sidekiq_db: '4'
