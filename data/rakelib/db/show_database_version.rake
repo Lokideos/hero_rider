@@ -7,10 +7,10 @@ namespace :db do
 
     @db = Sequel.connect(Settings.db.to_hash)
 
-    version = if @db.tables.include?(:schema_migrations)
-                @db[:schema_migrations].all.last&.dig(:filename) || "does not exist"
+    version = if @db.tables.include?(:schema_info)
+                @db[:schema_info].first[:version]
               end || 0
 
-    puts "Last Migration: #{version}"
+    puts "Schema Version: #{version}"
   end
 end
