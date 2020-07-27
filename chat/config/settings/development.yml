@@ -1,0 +1,9 @@
+redis:
+  host: ''
+  port: ''
+  db: '3'
+  sidekiq_db: '4'
+telegram:
+  bot_token: ''
+  admin_chat_id: ''
+  main_chat_id: ''
