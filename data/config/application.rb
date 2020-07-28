@@ -79,9 +79,37 @@ class Application < Roda
         end
       end
 
+      r.post 'activate_hunter' do
+        activate_hunter_params = validate_with!(ActivateHunterParamsContract, params).to_h.values
+        result = Hunters::ActivateHunterService.call(*activate_hunter_params)
+
+        response['Content-Type'] = 'application/json'
+        if result.success?
+          response.status = 200
+          result.hunter.to_json
+        else
+          response.status = 422
+          error_response(result.errors)
+        end
+      end
+
       r.post 'authenticate' do
         authenticate_params = validate_with!(AuthenticateParamsContract, params).to_h.values
         result = Players::AuthenticateService.call(*authenticate_params)
+
+        response['Content-Type'] = 'application/json'
+        if result.success?
+          response.status = 200
+          result.player.to_json
+        else
+          response.status = 403
+          error_response(result.errors)
+        end
+      end
+
+      r.post 'admin_authenticate' do
+        authenticate_params = validate_with!(AdminAuthenticateParamsContract, params).to_h.values
+        result = Players::AdminAuthenticateService.call(*authenticate_params)
 
         response['Content-Type'] = 'application/json'
         if result.success?

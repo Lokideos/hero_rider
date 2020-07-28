@@ -10,3 +10,9 @@ ru:
     players:
       authenticate_service:
         not_found: 'Игрок не найден'
+      admin_authenticate_service:
+        unauthorized: 'Игрок не является администратором'
+    hunters:
+      activate_hunter_service:
+        not_found: 'Охотник с таким именем не найден'
+        failure: 'Что-то пошло не так'

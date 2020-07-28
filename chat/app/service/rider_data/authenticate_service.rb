@@ -6,9 +6,14 @@ module RiderData
 
     param :telegram_username
     option :client, default: proc { DataService::HttpClient.new }
+    option :admin, default: proc { false }
 
     def call
-      result = @client.authenticate(@telegram_username)
+      result = if @admin
+                 @client.admin_authenticate(@telegram_username)
+               else
+                 @client.authenticate(@telegram_username)
+               end
 
       valid?(result) ? result : fail_t!(:unauthorized)
     end

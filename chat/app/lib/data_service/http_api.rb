@@ -26,8 +26,24 @@ module DataService
       { status: response.status, body: response.body }
     end
 
+    def activate_hunter(hunter_name)
+      response = connection.post('activate_hunter') do |request|
+        request.body = { hunter_name: hunter_name }
+      end
+
+      { status: response.status, body: response.body }
+    end
+
     def authenticate(telegram_username)
       response = connection.post('authenticate') do |request|
+        request.body = { username: telegram_username }
+      end
+
+      { status: response.status, body: response.body }
+    end
+
+    def admin_authenticate(telegram_username)
+      response = connection.post('admin_authenticate') do |request|
         request.body = { username: telegram_username }
       end
 
