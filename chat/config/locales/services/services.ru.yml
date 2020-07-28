@@ -1,5 +1,8 @@
 ru:
   services:
+    command_service:
+      games:
+        not_found: 'Игорь нет'
     rider_data:
       find_game_service:
         not_found: 'Игра не найдена'

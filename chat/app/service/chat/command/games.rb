@@ -14,7 +14,10 @@ module Chat
         game_title = @command[@message_type]['text'].split(' ')[1..].join(' ')
         player_name = @command[@message_type]['from']['username']
         result = RiderData::RelevantGamesService.call(game_title, player_name)
-        return if result.failure?
+        if result.failure?
+          @message = [I18n.t(:not_found, scope: 'services.command_service.games')]
+          return
+        end
 
         games_list = result.games_list
         player_username = @command[@message_type]['from']['username']
@@ -24,7 +27,6 @@ module Chat
         games_list.each_with_index do |game, index|
           message << "/#{index + 1} <b>#{game}</b>"
         end
-        message << 'Игорь нет' if games_list.empty?
 
         @message = [message.join("\n")]
       end
