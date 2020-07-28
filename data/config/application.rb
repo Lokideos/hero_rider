@@ -51,6 +51,34 @@ class Application < Roda
         end
       end
 
+      r.get 'relevant_games' do
+        relevant_games_params = validate_with!(RelevantGamesParamsContract, params).to_h.values
+        result = Games::RelevantGamesService.call(*relevant_games_params)
+
+        response['Content-Type'] = 'application/json'
+        if result.success?
+          response.status = 200
+          result.relevant_games.to_json
+        else
+          response.status = 404
+          error_response(result.errors)
+        end
+      end
+
+      r.get 'game_from_cache' do
+        game_from_cache_params = validate_with!(GameFromCacheParamsContract, params).to_h.values
+        result = Games::GameFromCacheService.call(*game_from_cache_params)
+
+        response['Content-Type'] = 'application/json'
+        if result.success?
+          response.status = 200
+          result.game_from_cache.to_json
+        else
+          response.status = 404
+          error_response(result.errors)
+        end
+      end
+
       r.post 'authenticate' do
         authenticate_params = validate_with!(AuthenticateParamsContract, params).to_h.values
         result = Players::AuthenticateService.call(*authenticate_params)

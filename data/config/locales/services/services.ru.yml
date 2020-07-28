@@ -3,6 +3,10 @@ ru:
     games:
       top_game_service:
         not_found: 'Игра не найдена'
+      relevant_games_service:
+        not_found: 'Игры не найдены'
+      game_from_cache_service:
+        not_found: 'Игра не найдена в кеше'
     players:
       authenticate_service:
         not_found: 'Игрок не найден'

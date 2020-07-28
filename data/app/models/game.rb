@@ -51,7 +51,7 @@ class Game < Sequel::Model
     end
   end
 
-  def self.relevant_games(title, message, message_type)
+  def self.relevant_games(title, player_name)
     return unless title.length > 1
 
     first_games = find_games(/^#{title}.*/i).uniq[0..9]
@@ -64,17 +64,16 @@ class Game < Sequel::Model
                                 term3: /.*#{split_title[2]}.*/i).uniq[0..(9 - query_size)]
     end
 
-    player = message[message_type]['from']['username']
     all_games = (first_games << second_games).flatten.uniq
-    RedisDb.redis.smembers("holy_rider:top:#{player}:games").each do |key|
+    RedisDb.redis.smembers("holy_rider:top:#{player_name}:games").each do |key|
       RedisDb.redis.del(key)
     end
     all_games.each_with_index do |game_title, index|
-      RedisDb.redis.setex("holy_rider:top:#{player}:games:#{index + 1}",
+      RedisDb.redis.setex("holy_rider:top:#{player_name}:games:#{index + 1}",
                           GAME_CACHE_EXPIRE,
                           game_title)
-      RedisDb.redis.sadd("holy_rider:top:#{player}:games",
-                         "holy_rider:top:#{player}:games:#{index + 1}")
+      RedisDb.redis.sadd("holy_rider:top:#{player_name}:games",
+                         "holy_rider:top:#{player_name}:games:#{index + 1}")
     end
 
     all_games
@@ -95,7 +94,10 @@ class Game < Sequel::Model
   end
 
   def self.cached_game_top(game)
-    JSON(RedisDb.redis.get("holy_rider:top:game:#{game.values.dig(:trophy_service_id)}"))
+    cached_top = RedisDb.redis.get("holy_rider:top:game:#{game.values.dig(:trophy_service_id)}")
+    return unless cached_top
+
+    JSON(cached_top)
   end
 
   # TODO: this should be on object level - not on class level

@@ -3,5 +3,9 @@ ru:
     rider_data:
       find_game_service:
         not_found: 'Игра не найдена'
+      relevant_games_service:
+        not_found: 'Игры не найдены'
+      retrieve_game_from_cache_service:
+        not_found: 'Игра не найдена в кеше'
       authenticate_service:
         unauthorized: 'Нет доступа'
