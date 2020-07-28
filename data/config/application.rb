@@ -50,6 +50,20 @@ class Application < Roda
           error_response(result.errors)
         end
       end
+
+      r.post 'authenticate' do
+        authenticate_params = validate_with!(AuthenticateParamsContract, params).to_h.values
+        result = Players::AuthenticateService.call(*authenticate_params)
+
+        response['Content-Type'] = 'application/json'
+        if result.success?
+          response.status = 200
+          result.player.to_json
+        else
+          response.status = 403
+          error_response(result.errors)
+        end
+      end
     end
 
     r.get 'favicon.ico' do

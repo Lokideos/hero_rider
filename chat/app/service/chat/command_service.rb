@@ -60,7 +60,12 @@ module Chat
         return
       end
 
-      # return unless Player.find(telegram_username: @command[@message_type]['from']['username'])
+      result = RiderData::AuthenticateService.call(@command[@message_type]['from']['username'])
+
+      if result.failure?
+        send_unauthorized_message
+        return
+      end
 
       command = @command[@message_type]['text'].split(' ').first[1..]
       if command.include? '@'
@@ -91,6 +96,11 @@ module Chat
     end
 
     private
+
+    def send_unauthorized_message
+      message = I18n.t(:unauthorized, scope: 'chat')
+      Chat::SendChatMessageService.call(chat_id: @current_chat_id, message: message)
+    end
 
     def prepared_command(command)
       command.split('_').map(&:capitalize).join
