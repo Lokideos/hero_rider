@@ -22,7 +22,7 @@ module Chat
         top = result.game_top
         title = "<a href='#{top['game']['icon_url']}'>" \
                 "#{top['game']['title']} #{top['game']['platform']}</a>"
-        game_top = Chat::GameTopService.call(top: top['progresses']).game_top
+        game_top = Chat::GameTopService.call(top['progresses']).game_top
 
         @message = [title, game_top]
       end

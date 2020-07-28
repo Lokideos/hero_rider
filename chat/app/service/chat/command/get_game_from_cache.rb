@@ -20,7 +20,7 @@ module Chat
 
         title = "<a href='#{cached_top['game']['icon_url']}'>" \
                 "#{cached_top['game']['title']} #{cached_top['game']['platform']}</a>"
-        game_top = Chat::GameTopService.call(top: cached_top['progresses']).game_top
+        game_top = Chat::GameTopService.call(cached_top['progresses']).game_top
 
         @message = [title, game_top]
       end

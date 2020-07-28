@@ -14,7 +14,7 @@ module Chat
     # TODO: Refactoring needed
     def call
       game_top = []
-      @top[:top].each do |progress|
+      @top.each do |progress|
         player_name = progress['trophy_account']
         player_progress = progress['progress']
         platinum_trophy = progress['platinum_earning_date'] ? "\xF0\x9F\x8F\x86" : nil
