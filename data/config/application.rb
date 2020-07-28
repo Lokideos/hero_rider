@@ -38,8 +38,8 @@ class Application < Roda
 
     r.on 'v1' do
       r.get 'game_top' do
-        game_top_params = validate_with!(GameTopParamsContract, params).to_h
-        result = Games::TopGameService.call(game_title: game_top_params[:game_title])
+        game_top_params = validate_with!(GameTopParamsContract, params).to_h.values
+        result = Games::TopGameService.call(*game_top_params)
 
         response['Content-Type'] = 'application/json'
         if result.success?

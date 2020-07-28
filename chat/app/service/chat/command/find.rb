@@ -12,7 +12,7 @@ module Chat
 
       def call
         game_title = @command[@message_type]['text'].split(' ')[1..].join(' ')
-        result = RiderData::FindGameService.call(game_title: game_title)
+        result = RiderData::FindGameService.call(game_title)
 
         if result.failure?
           @message = ['Игра не найдена']
