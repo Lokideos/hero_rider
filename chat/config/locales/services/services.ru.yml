@@ -1,0 +1,5 @@
+ru:
+  services:
+    rider_data:
+      find_game_service:
+        not_found: 'Игра не найдена'

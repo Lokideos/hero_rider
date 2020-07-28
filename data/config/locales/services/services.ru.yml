@@ -1,0 +1,5 @@
+ru:
+  services:
+    games:
+      top_game_service:
+        not_found: 'Игра не найдена'
