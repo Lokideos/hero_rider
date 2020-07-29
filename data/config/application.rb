@@ -81,7 +81,7 @@ class Application < Roda
 
       r.post 'activate_hunter' do
         activate_hunter_params = validate_with!(ActivateHunterParamsContract, params).to_h.values
-        result = Hunters::ActivateHunterService.call(*activate_hunter_params)
+        result = Hunters::GetHunterService.call(*activate_hunter_params)
 
         response['Content-Type'] = 'application/json'
         if result.success?
@@ -89,6 +89,20 @@ class Application < Roda
           result.hunter.to_json
         else
           response.status = 422
+          error_response(result.errors)
+        end
+      end
+
+      r.get 'hunter' do
+        hunter_params = validate_with!(HunterParamsContract, params).to_h.values
+        result = Hunters::ActivateHunterService.call(*hunter_params)
+
+        response['Content-Type'] = 'application/json'
+        if result.success?
+          response.status = 200
+          result.hunter.to_json
+        else
+          response.status = 404
           error_response(result.errors)
         end
       end

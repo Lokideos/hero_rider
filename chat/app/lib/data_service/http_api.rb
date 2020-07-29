@@ -34,6 +34,14 @@ module DataService
       { status: response.status, body: response.body }
     end
 
+    def request_hunter_data(hunter_name)
+      response = connection.get('hunter') do |request|
+        request.body = { hunter_name: hunter_name }
+      end
+
+      { status: response.status, body: response.body }
+    end
+
     def authenticate(telegram_username)
       response = connection.post('authenticate') do |request|
         request.body = { username: telegram_username }
