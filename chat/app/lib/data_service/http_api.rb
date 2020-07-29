@@ -50,6 +50,12 @@ module DataService
       { status: response.status, body: response.body }
     end
 
+    def request_hunters_data
+      response = connection.get('hunters')
+
+      { status: response.status, body: response.body }
+    end
+
     def hunter_gear_status(hunter_name)
       response = connection.get('hunter_gear_status') do |request|
         request.body = { hunter_name: hunter_name }

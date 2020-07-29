@@ -17,6 +17,8 @@ ru:
       hunter_gear_status:
         success: "Охотник %{name} готов к работе"
         failure: "Охотник %{name} не готов к работе - отсутствует токен"
+      hunter_stats:
+        failure: 'Что-то пошло не так'
     rider_data:
       hunters:
         activate_hunter_service:
@@ -24,6 +26,8 @@ ru:
         deactivate_hunter_service:
           failure: 'Что-то пошло не так'
         hunter_gear_status_service:
+          failure: 'Что-то пошло не так'
+        get_hunters_service:
           failure: 'Что-то пошло не так'
       find_game_service:
         not_found: 'Игра не найдена'

@@ -122,6 +122,19 @@ class Application < Roda
         end
       end
 
+      r.get 'hunters' do
+        result = Hunters::GetAllHuntersService.call
+
+        response['Content-Type'] = 'application/json'
+        if result.success?
+          response.status = 200
+          HunterStatsSerializer.serialize(result.hunters).to_json
+        else
+          response.status = 422
+          error_response(result.errors)
+        end
+      end
+
       r.get 'hunter_gear_status' do
         hunter_gear_status_params = validate_with!(HunterGearStatusParamsContract, params).to_h
                                                                                           .values
