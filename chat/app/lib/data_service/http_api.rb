@@ -34,6 +34,14 @@ module DataService
       { status: response.status, body: response.body }
     end
 
+    def deactivate_hunter(hunter_name)
+      response = connection.post('deactivate_hunter') do |request|
+        request.body = { hunter_name: hunter_name }
+      end
+
+      { status: response.status, body: response.body }
+    end
+
     def request_hunter_data(hunter_name)
       response = connection.get('hunter') do |request|
         request.body = { hunter_name: hunter_name }

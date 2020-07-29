@@ -7,12 +7,18 @@ ru:
         success: "%{name} активирован"
         not_found: "Охотника с именем %{name} не существует"
         failure: 'Что-то пошло не так'
+      hunter_deactivate:
+        success: "%{name} деактивирован"
+        not_found: "Охотника с именем %{name} не существует"
+        failure: 'Что-то пошло не так'
       hunter_credentials:
         success: "%{name} credentials: %{email} %{password}"
         not_found: "Охотника с именем %{name} не существует"
     rider_data:
       hunters:
         activate_hunter_service:
+          failure: 'Что-то пошло не так'
+        deactivate_hunter_service:
           failure: 'Что-то пошло не так'
       find_game_service:
         not_found: 'Игра не найдена'
