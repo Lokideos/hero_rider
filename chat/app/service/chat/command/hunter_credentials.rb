@@ -15,11 +15,6 @@ module Chat
         result = RiderData::AuthenticateService.call(telegram_username, admin: true)
         return unless result.success?
 
-        # name = @command[@message_type]['text'].split(' ')[1]
-        # hunter = TrophyHunter.find(name: name)
-        #
-        # ["#{name} credentials: #{hunter.email} #{hunter.password}"] if hunter
-
         name = @command[@message_type]['text'].split(' ')[1]
         result = RiderData::Hunters::GetHunterService.call(name)
 
