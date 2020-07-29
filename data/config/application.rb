@@ -122,6 +122,21 @@ class Application < Roda
         end
       end
 
+      r.get 'hunter_gear_status' do
+        hunter_gear_status_params = validate_with!(HunterGearStatusParamsContract, params).to_h
+                                                                                          .values
+        result = Hunters::GetHunterGearStatusService.call(*hunter_gear_status_params)
+
+        response['Content-Type'] = 'application/json'
+        if result.success?
+          response.status = 200
+          result.hunter.to_json
+        else
+          response.status = 422
+          error_response(result.errors)
+        end
+      end
+
       r.post 'authenticate' do
         authenticate_params = validate_with!(AuthenticateParamsContract, params).to_h.values
         result = Players::AuthenticateService.call(*authenticate_params)

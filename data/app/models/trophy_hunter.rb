@@ -34,7 +34,7 @@ class TrophyHunter < Sequel::Model
   end
 
   def geared_up?
-    !access_token.nil? && !access_token.empty?
+    access_token.present?
   end
 
   def active?
@@ -42,6 +42,6 @@ class TrophyHunter < Sequel::Model
   end
 
   def access_token
-    HolyRider::Application.instance.redis.get("holy_rider:trophy_hunter:#{name}:access_token")
+    RedisDb.redis.get("holy_rider:trophy_hunter:#{name}:access_token")
   end
 end
