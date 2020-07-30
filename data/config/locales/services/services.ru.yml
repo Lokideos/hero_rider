@@ -14,6 +14,8 @@ ru:
         not_found: 'Игрок не найден'
       admin_authenticate_service:
         unauthorized: 'Игрок не является администратором'
+      find_player_service:
+        not_found: 'Игрок не найден'
     hunters:
       activate_hunter_service:
         not_found: 'Охотник с таким именем не найден'

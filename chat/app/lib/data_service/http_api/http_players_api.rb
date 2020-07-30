@@ -18,6 +18,14 @@ module DataService
 
         { status: response.status, body: response.body }
       end
+
+      def player_info(username)
+        response = connection.get('players/info') do |request|
+          request.body = { username: username }
+        end
+
+        { status: response.status, body: response.body }
+      end
     end
   end
 end

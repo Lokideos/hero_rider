@@ -44,3 +44,5 @@ ru:
         unauthorized: 'Нет доступа'
       find_last_game_service:
         failure: 'Что-то пошло не так'
+      player_info_service:
+        not_found: 'Игрок с таким именем не найден'

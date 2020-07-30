@@ -183,6 +183,20 @@ class Application < Roda
       end
 
       r.on 'players' do
+        r.get 'info' do
+          player_info_params = validate_with!(PlayerInfoParamsContract, params).to_h.values
+          result = Players::FindPlayerService.call(*player_info_params)
+
+          response['Content-Type'] = 'application/json'
+          if result.success?
+            response.status = 200
+            PlayerProfileSerializer.serialize(result.player).to_json
+          else
+            response.status = 404
+            error_response(result.errors)
+          end
+        end
+
         r.post 'authenticate' do
           authenticate_params = validate_with!(AuthenticateParamsContract, params).to_h.values
           result = Players::AuthenticateService.call(*authenticate_params)
