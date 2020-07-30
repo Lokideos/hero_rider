@@ -40,6 +40,14 @@ module DataService
 
         { status: response.status, body: response.body }
       end
+
+      def authenticate_hunter(hunter_name, sso_cookie)
+        response = connection.get('hunters/authenticate') do |request|
+          request.body = { hunter_name: hunter_name, sso_cookie: sso_cookie }
+        end
+
+        { status: response.status, body: response.body }
+      end
     end
   end
 end

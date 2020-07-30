@@ -24,3 +24,12 @@ ru:
       get_hunter_gear_status_service:
         not_found: 'Охотник с таким именем не найден'
         failure: 'Охотник с таким именем не готов к работе - отсутствует токен'
+      authenticate_hunter_service:
+        not_found: 'Охотник с таким именем не найден'
+        failure: "Охотник %{name} не смог пройти аутентификацию"
+    psn:
+      initial_authentication_service:
+        grant_code_failure: 'Не удалось получить grant_code'
+        refresh_token_failure: 'Не удалось получить refresh_token'
+      update_access_token_service:
+        failure: 'Не удалось получить access_token'
