@@ -79,6 +79,19 @@ class Application < Roda
             error_response(result.errors)
           end
         end
+
+        r.get 'last' do
+          result = Games::LastGameService.call
+
+          response['Content-Type'] = 'application/json'
+          if result.success?
+            response.status = 200
+            result.game_top.to_json
+          else
+            response.status = 422
+            error_response(result.errors)
+          end
+        end
       end
 
       r.on 'hunters' do

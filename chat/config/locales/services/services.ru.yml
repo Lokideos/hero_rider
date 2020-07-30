@@ -42,3 +42,5 @@ ru:
         not_found: 'Игра не найдена в кеше'
       authenticate_service:
         unauthorized: 'Нет доступа'
+      find_last_game_service:
+        failure: 'Что-то пошло не так'

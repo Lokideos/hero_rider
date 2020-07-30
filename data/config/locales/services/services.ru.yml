@@ -7,6 +7,8 @@ ru:
         not_found: 'Игры не найдены'
       game_from_cache_service:
         not_found: 'Игра не найдена в кеше'
+      last_game_service:
+        failure: 'Что-то пошло не так. Скорее всего, нет ни одной игры'
     players:
       authenticate_service:
         not_found: 'Игрок не найден'

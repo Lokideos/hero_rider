@@ -26,6 +26,12 @@ module DataService
 
         { status: response.status, body: response.body }
       end
+
+      def last_game
+        response = connection.get('games/last')
+
+        { status: response.status, body: response.body }
+      end
     end
   end
 end
