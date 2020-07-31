@@ -39,6 +39,18 @@ ru:
         success: "Теперь трофеи игрока %{name} больше не отслеживаются"
       player_watch_on:
         success: "Теперь трофеи игрока %{name} отслеживаются"
+      top:
+        header: 'Топ трофеев:'
+      top_rare:
+        header: 'Топ редких трофеев:'
+      top_games_force_update:
+        success: 'Топы по играм были успешно обновлены'
+      top_players_force_update:
+        success: 'Топы трофеев были успешно обновлены'
+      trophy_ping_off:
+        success: 'Оповещения о новых трофеях выключены'
+      trophy_ping_on:
+        success: 'Оповещения о новых трофеях включены'
     games:
       top_game_service:
         not_found: 'Игра не найдена'
@@ -70,6 +82,10 @@ ru:
       watch_on_service:
         not_found: 'Игрок не найден'
         already_watched_on: "Трофеи игрока %{name} уже отслеживаются"
+      trophy_ping_off_service:
+        already_pinged_off: 'Оповещения о новых трофеях уже выключены'
+      trophy_ping_on_service:
+        already_pinged_on: 'Оповещения о новых трофеях уже включены'
     hunters:
       activate_hunter_service:
         not_found: 'Охотник с таким именем не найден'
