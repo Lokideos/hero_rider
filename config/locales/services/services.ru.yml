@@ -27,6 +27,8 @@ ru:
         success_with_trophies: "%{username} создан и связан с аккаунтом %{trophy_account}"
         player_not_provided: 'Пожалуйста, введите ник нового игрока'
         failure: 'Не удалось создать пользователя'
+      player_destroy:
+        success: "Игрок %{name} был удален"
     games:
       top_game_service:
         not_found: 'Игра не найдена'
@@ -42,6 +44,8 @@ ru:
       admin_authenticate_service:
         unauthorized: 'Игрок не является администратором'
       find_player_service:
+        not_found: 'Игрок не найден'
+      destroy_service:
         not_found: 'Игрок не найден'
     hunters:
       activate_hunter_service:

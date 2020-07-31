@@ -26,7 +26,7 @@ module Chat
         message << '/man_screenshot - выводит мануал по загрузке скриншотов'
 
         telegram_username = @command[@message_type]['from']['username']
-        result = Players::AdminAuthenticateService.call(telegram_username)
+        result = ::Players::AdminAuthenticateService.call(telegram_username)
         return @message = [message.join("\n")] unless result.success?
 
         message << '/hunter_stats - показывает текущих охотников за трофеями'

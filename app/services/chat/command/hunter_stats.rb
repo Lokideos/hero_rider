@@ -12,10 +12,10 @@ module Chat
 
       def call
         telegram_username = @command[@message_type]['from']['username']
-        result = Players::AdminAuthenticateService.call(telegram_username)
+        result = ::Players::AdminAuthenticateService.call(telegram_username)
         return unless result.success?
 
-        result = Hunters::GetAllHuntersService.call
+        result = ::Hunters::GetAllHuntersService.call
         return [I18n.t(:failure, scope: 'services.command_service.hunter_stats')] if result.failure?
 
         message = []

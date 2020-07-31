@@ -12,7 +12,7 @@ module Chat
 
       def call
         telegram_username = @command[@message_type]['from']['username']
-        result = Players::AdminAuthenticateService.call(telegram_username)
+        result = ::Players::AdminAuthenticateService.call(telegram_username)
         return unless result.success?
 
         message = @command[@message_type]['text'].split(' ')
@@ -23,7 +23,7 @@ module Chat
           return
         end
 
-        result = Players::CreateService.call(username, trophy_account)
+        result = ::Players::CreateService.call(username, trophy_account)
         @message = result.success? ? success_response(result.player) : failure_response
       end
 

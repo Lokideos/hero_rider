@@ -13,7 +13,7 @@ module Chat
       def call
         text = @command[@message_type]['text']
         player_name = text.include?('@') ? text.split(' ')[1][1..] : text.split(' ')[1]
-        result = Players::FindPlayerService.call(player_name)
+        result = ::Players::FindPlayerService.call(player_name)
         return @message = ['Игрок не найден'] if result.failure?
 
         profile = result.player.profile

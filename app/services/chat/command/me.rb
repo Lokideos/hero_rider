@@ -11,7 +11,7 @@ module Chat
       attr_reader :message
 
       def call
-        result = Players::FindPlayerService.call(@command['message']['from']['username'])
+        result = ::Players::FindPlayerService.call(@command['message']['from']['username'])
         return if result.failure?
 
         profile = result.player.profile

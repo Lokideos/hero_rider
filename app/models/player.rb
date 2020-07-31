@@ -93,9 +93,8 @@ class Player < Sequel::Model
   end
 
   def self.trophy_top_force_update
-    redis = HolyRider::Application.instance.redis
-    redis.keys('holy_rider:players:trophy_points:*').each do |key|
-      redis.del(key)
+    RedisDb.redis.keys('holy_rider:players:trophy_points:*').each do |key|
+      RedisDb.redis.del(key)
     end
 
     trophy_top_rare
@@ -103,31 +102,27 @@ class Player < Sequel::Model
   end
 
   def rare_points
-    redis = HolyRider::Application.instance.redis
-    redis.get("holy_rider:players:trophy_points:rare:#{trophy_account}")
+    RedisDb.redis.get("holy_rider:players:trophy_points:rare:#{trophy_account}")
   end
 
   def update_rare_points
-    redis = HolyRider::Application.instance.redis
     rare_points = trophies.map do |trophy|
       RARE_TROPHIES_WEIGHTS[trophy.trophy_rare][trophy.trophy_type.to_sym]
     end.inject(0, :+).to_s.chop
-    redis.set("holy_rider:players:trophy_points:rare:#{trophy_account}", rare_points)
+    RedisDb.redis.set("holy_rider:players:trophy_points:rare:#{trophy_account}", rare_points)
 
     rare_points
   end
 
   def trophy_points
-    redis = HolyRider::Application.instance.redis
-    redis.get("holy_rider:players:trophy_points:common:#{trophy_account}")
+    RedisDb.redis.get("holy_rider:players:trophy_points:common:#{trophy_account}")
   end
 
   def update_trophy_points
-    redis = HolyRider::Application.instance.redis
     trophy_points = trophies.map do |trophy|
       TROPHIES_WEIGHT[trophy.trophy_type.to_sym]
     end.inject(0, :+)
-    redis.set("holy_rider:players:trophy_points:common:#{trophy_account}", trophy_points)
+    RedisDb.redis.set("holy_rider:players:trophy_points:common:#{trophy_account}", trophy_points)
 
     trophy_points
   end
