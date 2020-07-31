@@ -1,0 +1,9 @@
+---
+:concurency: 1
+:queues:
+  - commands
+  - mentions
+  - message_deletion
+  - trophies
+  - initial_user_data_load
+  - screenshots
