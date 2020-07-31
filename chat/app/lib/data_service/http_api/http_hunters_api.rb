@@ -28,7 +28,7 @@ module DataService
       end
 
       def request_hunters_data
-        response = connection.get('hunters')
+        response = connection.get('hunters/stats')
 
         { status: response.status, body: response.body }
       end

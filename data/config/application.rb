@@ -95,7 +95,7 @@ class Application < Roda
       end
 
       r.on 'hunters' do
-        r.get do
+        r.get 'stats' do
           result = Hunters::GetAllHuntersService.call
 
           response['Content-Type'] = 'application/json'
