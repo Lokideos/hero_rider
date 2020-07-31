@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Players
-  class DestroyService
+  class WatchOffService
     prepend BasicService
 
     param :username
@@ -12,19 +12,14 @@ module Players
       @player = Player.find(telegram_username: @username)
       return fail_t!(:not_found) unless @player.present?
 
-      RedisDb.redis.srem('holy_rider:watcher:players', @player.trophy_account)
-      @player.remove_all_games
-      @player.remove_all_trophies
-      @player.delete
+      return fail_t!(:already_watched_off, name: @username) unless @player.on_watch?
 
-      Player.trophy_top_force_update
-      Game.update_all_progress_caches
+      @player.update(on_watch: false)
+      RedisDb.redis.srem('holy_rider:watcher:players', @player.trophy_account)
     end
 
-    private
-
-    def fail_t!(key)
-      fail!(I18n.t(key, scope: 'services.players.destroy_service'))
+    def fail_t!(key, name: nil)
+      fail!(I18n.t(key, scope: 'services.players.watch_off_service', name: name))
     end
   end
 end

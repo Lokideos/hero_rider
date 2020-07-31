@@ -29,6 +29,16 @@ ru:
         failure: 'Не удалось создать пользователя'
       player_destroy:
         success: "Игрок %{name} был удален"
+      player_link:
+        success: "Игрок %{name} был успешно связан с аккаунтом %{trophy_account}"
+      player_reload:
+        success: "Данные игрока %{name} будут запрошены заново"
+      player_rename:
+        success: "Игрок %{name} успешно переименован в %{new_name}"
+      player_watch_off:
+        success: "Теперь трофеи игрока %{name} больше не отслеживаются"
+      player_watch_on:
+        success: "Теперь трофеи игрока %{name} отслеживаются"
     games:
       top_game_service:
         not_found: 'Игра не найдена'
@@ -47,6 +57,19 @@ ru:
         not_found: 'Игрок не найден'
       destroy_service:
         not_found: 'Игрок не найден'
+      link_service:
+        not_found: 'Игрок не найден'
+      reload_service:
+        not_found: 'Игрок не найден'
+      rename_service:
+        not_found: 'Игрок не найден'
+        incorrect_name: 'Введите корректный никнейм'
+      watch_off_service:
+        not_found: 'Игрок не найден'
+        already_watched_off: "Трофеи игрока %{name} уже не отслеживаются"
+      watch_on_service:
+        not_found: 'Игрок не найден'
+        already_watched_on: "Трофеи игрока %{name} уже отслеживаются"
     hunters:
       activate_hunter_service:
         not_found: 'Охотник с таким именем не найден'
