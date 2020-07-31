@@ -2,3 +2,6 @@ app:
   name: 'hero_rider_chat'
 telegram:
   endpoint: 'https://api.telegram.org/bot'
+services:
+  data:
+    endpoint: 'http://localhost:3010/v1/'

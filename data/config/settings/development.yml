@@ -3,3 +3,5 @@ redis:
   port: ''
   db: '2'
   sidekiq_db: '4'
+db:
+  database: hero_rider_data_development

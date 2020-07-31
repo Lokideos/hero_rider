@@ -51,7 +51,7 @@ class Game < Sequel::Model
     end
   end
 
-  def self.relevant_games(title, message, message_type)
+  def self.relevant_games(title, player_name)
     return unless title.length > 1
 
     first_games = find_games(/^#{title}.*/i).uniq[0..9]
@@ -64,23 +64,23 @@ class Game < Sequel::Model
                                 term3: /.*#{split_title[2]}.*/i).uniq[0..(9 - query_size)]
     end
 
-    player = message[message_type]['from']['username']
-    redis = HolyRider::Application.instance.redis
     all_games = (first_games << second_games).flatten.uniq
-    redis.smembers("holy_rider:top:#{player}:games").each do |key|
-      redis.del(key)
+    RedisDb.redis.smembers("holy_rider:top:#{player_name}:games").each do |key|
+      RedisDb.redis.del(key)
     end
     all_games.each_with_index do |game_title, index|
-      redis.setex("holy_rider:top:#{player}:games:#{index + 1}", GAME_CACHE_EXPIRE, game_title)
-      redis.sadd("holy_rider:top:#{player}:games", "holy_rider:top:#{player}:games:#{index + 1}")
+      RedisDb.redis.setex("holy_rider:top:#{player_name}:games:#{index + 1}",
+                          GAME_CACHE_EXPIRE,
+                          game_title)
+      RedisDb.redis.sadd("holy_rider:top:#{player_name}:games",
+                         "holy_rider:top:#{player_name}:games:#{index + 1}")
     end
 
     all_games
   end
 
   def self.find_game_from_cache(player, index)
-    redis = HolyRider::Application.instance.redis
-    game = redis.get("holy_rider:top:#{player}:games:#{index}")
+    game = RedisDb.redis.get("holy_rider:top:#{player}:games:#{index}")
     return unless game
 
     game_title = game.split(' ')[0..-2].join(' ')
@@ -94,13 +94,14 @@ class Game < Sequel::Model
   end
 
   def self.cached_game_top(game)
-    redis = HolyRider::Application.instance.redis
-    redis.get("holy_rider:top:game:#{game.values.dig(:trophy_service_id)}")
+    cached_top = RedisDb.redis.get("holy_rider:top:game:#{game.values.dig(:trophy_service_id)}")
+    return unless cached_top
+
+    JSON(cached_top)
   end
 
   # TODO: this should be on object level - not on class level
   def self.store_game_top(game)
-    redis = HolyRider::Application.instance.redis
     game_id = game.values.dig(:game_id)
 
     progresses = GameAcquisition.find_progresses(game_id)
@@ -126,22 +127,22 @@ class Game < Sequel::Model
         player_progresses.select { |player_progress| player_progress.platinum_earning_date.nil? }
       ].flatten
     end
-
-    game_top = Oj.dump({
-                         game: {
-                           icon_url: game.icon_url,
-                           title: game.title,
-                           platform: game.platform
-                         },
-                         progresses: grouped_progresses.values.flatten.map do |progress|
-                                       {
-                                         trophy_account: progress.trophy_account,
-                                         progress: progress.progress,
-                                         platinum_earning_date: progress.platinum_earning_date
-                                       }
-                                     end
-                       }, {})
-    redis.set("holy_rider:top:game:#{game.values.dig(:trophy_service_id)}", game_top)
+    game_top = {
+      game: {
+        icon_url: game.icon_url,
+        title: game.title,
+        platform: game.platform
+      },
+      progresses: grouped_progresses.values.flatten.map do |progress|
+        {
+          trophy_account: progress.trophy_account,
+          progress: progress.progress,
+          platinum_earning_date: progress.platinum_earning_date
+        }
+      end
+    }
+    RedisDb.redis.set("holy_rider:top:game:#{game.values.dig(:trophy_service_id)}",
+                      game_top.to_json)
 
     game_top
   end

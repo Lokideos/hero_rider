@@ -11,7 +11,7 @@ class TrophyHunter < Sequel::Model
 
   # TODO: change method name to more appropriate one
   def full_authentication(sso_cookie)
-    HolyRider::Service::PSN::InitialAuthenticationService.new(self, sso_cookie).call
+    Psn::InitialAuthenticationService.call(self, sso_cookie)
   end
 
   def authenticate
@@ -19,9 +19,9 @@ class TrophyHunter < Sequel::Model
   end
 
   def store_access_token(access_token)
-    HolyRider::Application.instance.redis.setex("holy_rider:trophy_hunter:#{name}:access_token",
-                                                DEFAULT_TOKEN_EXPIRATION_TIME,
-                                                access_token)
+    RedisDb.redis.setex("holy_rider:trophy_hunter:#{name}:access_token",
+                        DEFAULT_TOKEN_EXPIRATION_TIME,
+                        access_token)
     access_token
   end
 
@@ -34,7 +34,7 @@ class TrophyHunter < Sequel::Model
   end
 
   def geared_up?
-    !access_token.nil? && !access_token.empty?
+    access_token.present?
   end
 
   def active?
@@ -42,6 +42,6 @@ class TrophyHunter < Sequel::Model
   end
 
   def access_token
-    HolyRider::Application.instance.redis.get("holy_rider:trophy_hunter:#{name}:access_token")
+    RedisDb.redis.get("holy_rider:trophy_hunter:#{name}:access_token")
   end
 end

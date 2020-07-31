@@ -11,7 +11,6 @@ module Chat
       attr_reader :message
 
       def call
-        # player = Player.find(telegram_username: @command[@message_type]['from']['username'])
         message = ['Список команд:']
         message << '/last - показывает топ по последней игре, по которой был получен трофей'
         message << '/top - выводит топ по трофеям среди игроков'
@@ -25,7 +24,10 @@ module Chat
         message << '/man_find - выводит мануал по работе с комадной <code>/find</code>'
         message << '/man_games - выводит мануал по работе с комадной <code>/games</code>'
         message << '/man_screenshot - выводит мануал по загрузке скриншотов'
-        # return [message.join("\n")] unless player.admin?
+
+        telegram_username = @command[@message_type]['from']['username']
+        result = RiderData::AuthenticateService.call(telegram_username, admin: true)
+        return @message = [message.join("\n")] unless result.success?
 
         message << '/hunter_stats - показывает текущих охотников за трофеями'
         message << '/hunter_credentials [hunter_name] - показывает email и пароль охотника'

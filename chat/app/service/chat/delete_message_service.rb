@@ -7,12 +7,6 @@ module Chat
     param :message_id
     option :client, default: proc { TelegramService::HttpClient.new }
 
-    # def initialize(message_uid:, client: nil)
-    #   @message_uid = message_uid
-    #   @client = client || HolyRider::Client::Telegram.new
-    #   @redis = HolyRider::Application.instance.redis
-    # end
-
     def call
       message_info = RedisDb.redis.hgetall("holy_rider:bot:messages:to_delete:info:#{@message_uid}")
       return if message_info.empty?
