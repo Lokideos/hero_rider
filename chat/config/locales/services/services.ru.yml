@@ -22,6 +22,11 @@ ru:
       hunter_gear_up:
         success: "%{name} locked & load"
         failure: "%{name} не смог аутентифицроваться"
+      player_add:
+        success: "%{username} создан"
+        success_with_trophies: "%{username} создан и связан с аккаунтом %{trophy_account}"
+        player_not_provided: 'Пожалуйста, введите ник нового игрока'
+        failure: 'Не удалось создать пользователя'
     rider_data:
       hunters:
         activate_hunter_service:
@@ -34,6 +39,9 @@ ru:
           failure: 'Что-то пошло не так'
         gear_up_service:
           failure: "%{name} не смог аутентифицроваться"
+      players:
+        add_player_service:
+          failure: "Не удалось создать пользователя %{name}"
       find_game_service:
         not_found: 'Игра не найдена'
       relevant_games_service:

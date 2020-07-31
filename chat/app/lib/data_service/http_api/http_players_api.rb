@@ -26,6 +26,14 @@ module DataService
 
         { status: response.status, body: response.body }
       end
+
+      def create_player(telegram_username, trophy_account: nil)
+        response = connection.post('players/create') do |request|
+          request.body = { username: telegram_username, trophy_account: trophy_account }
+        end
+
+        { status: response.status, body: response.body }
+      end
     end
   end
 end

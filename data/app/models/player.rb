@@ -42,6 +42,12 @@ class Player < Sequel::Model
                           join_table: :trophy_acquisitions
   one_to_many :message_thread
 
+  def validate
+    super
+    validates_presence :telegram_username, message: I18n.t(:blank,
+                                                           scope: 'models.errors.player.username')
+  end
+
   dataset_module do
     def active
       where(on_watch: true)

@@ -183,6 +183,20 @@ class Application < Roda
       end
 
       r.on 'players' do
+        r.post 'create' do
+          add_player_params = validate_with!(PlayersCreateParamsContract, params).to_h.values
+          result = Players::CreateService.call(*add_player_params)
+
+          response['Content-Type'] = 'application/json'
+          if result.success?
+            response.status = 201
+            result.player.to_json
+          else
+            response.status = 404
+            error_response(result.errors)
+          end
+        end
+
         r.get 'info' do
           player_info_params = validate_with!(PlayerInfoParamsContract, params).to_h.values
           result = Players::FindPlayerService.call(*player_info_params)

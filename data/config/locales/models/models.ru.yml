@@ -1,0 +1,5 @@
+ru:
+  models:
+    errors:
+      player:
+        blank: 'Имя игрока не может быть пустым'
