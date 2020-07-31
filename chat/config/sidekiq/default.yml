@@ -1,6 +1,0 @@
----
-:concurency: 1
-:queues:
-  - commands
-  - mentions
-  - message_deletion
