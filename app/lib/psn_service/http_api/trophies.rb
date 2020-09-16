@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PsnService
   module HttpApi
     module Trophies
@@ -8,7 +10,7 @@ module PsnService
         game_progress_update =
           RedisDb.redis.get("holy_rider:watcher:players:progress_update:#{player_name}")
         limit = 128 if initial_load || game_progress_update
-        response = connection.get('') do |request|
+        response = connection.get do |request|
           request.headers = trophy_common_headers(token)
           request.params = trophy_list_params(offset, limit, player_name)
         end
@@ -18,7 +20,7 @@ module PsnService
 
         until (response_body['totalResults'] - limit - offset).negative?
           offset += limit
-          next_response = connection.get('') do |request|
+          next_response = connection.get do |request|
             request.headers = trophy_common_headers(token)
             request.params = trophy_list_params(offset, limit, player_name)
           end
