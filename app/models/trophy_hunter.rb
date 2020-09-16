@@ -15,7 +15,7 @@ class TrophyHunter < Sequel::Model
   end
 
   def authenticate
-    HolyRider::Service::PSN::UpdateAccessTokenService.new(self).call
+    Psn::UpdateAccessTokenService.new(self).call.access_token
   end
 
   def store_access_token(access_token)
