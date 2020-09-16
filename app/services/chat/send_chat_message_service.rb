@@ -7,7 +7,7 @@ module Chat
     DEFAULT_EXPIRATION_TIME = Game::GAME_CACHE_EXPIRE
 
     param :message
-    param :to_delete
+    param :to_delete, default: false
     param :chat_id, default: proc { Settings.telegram.main_chat_id }
     option :client, default: proc { TelegramService::HttpClient.new }
 
