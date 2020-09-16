@@ -14,7 +14,7 @@ module PsnService
           request.headers = trophy_common_headers(token)
           request.params = trophy_list_params(offset, limit, player_name)
         end
-        return response unless initial_load
+        return response.body unless initial_load
 
         response_body = response.body
 
