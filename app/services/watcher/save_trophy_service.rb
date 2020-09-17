@@ -31,7 +31,7 @@ module Watcher
                       else
                         ['<code>' \
                                   "#{@player.telegram_username}</code>"]
-end
+                      end
       message_parts << "- <a href='#{link}'>#{@trophy.game.title} #{@trophy.game.platform}</a>"
 
       message = message_parts.join(' ')
