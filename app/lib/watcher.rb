@@ -5,10 +5,6 @@ module Watcher
 
   DEFAULT_TAINT_TIME = 10
 
-  # def initialize
-  # @process_screenshots_service = HolyRider::Service::Screenshots::ProcessScreenshotsService
-  # end
-
   def prepare
     RedisDb.redis.del('holy_rider:watcher:players')
     RedisDb.redis.del('holy_rider:watcher:hunters')
@@ -81,8 +77,9 @@ module Watcher
       Watcher::NewTrophiesService.call(player_name: player, updates: psn_updates,
                                        hunter_name: hunter_name)
       p "Watcher: player #{player} status checked"
-      # @process_screenshots_service.new(token: token).call
-      # p 'Watcher: new screenshots processed'
+
+      Screenshots::ProcessScreenshotsService.call(token: token)
+      p 'Watcher: new screenshots processed'
     end
 
     p 'Watcher: all players checked'
