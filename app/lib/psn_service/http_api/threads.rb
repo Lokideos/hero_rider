@@ -21,13 +21,13 @@ module PsnService
       end
 
       def request_messages_from_thread(thread_id:, token:, message_count: 10)
-        endpoint = "/#{thread_id}"
+        endpoint = thread_id.to_s
         response = connection.get(endpoint) do |request|
           request.headers = threads_common_headers(token)
           request.params = thread_messages_params(message_count, MESSAGE_THREADS_FIELDS.join(','))
         end
 
-        response.body['threads']
+        response.body['threadEvents']
       end
 
       def download_image_data(token:)

@@ -10,6 +10,8 @@ module Screenshots
 
     def call
       db_thread = MessageThread.find(message_thread_id: @message_thread['threadId'])
+      return unless db_thread.present?
+
       sender_name = db_thread.player.telegram_username
       messages = @client.request_messages_from_thread(thread_id: @message_thread['threadId'],
                                                       token: @token)
@@ -23,8 +25,7 @@ module Screenshots
       end
 
       image_messages.each do |message|
-        HolyRider::Workers::ProcessScreenshotDownload.perform_async(message, @token,
-                                                                    sender_name)
+        Workers::ProcessScreenshotDownload.perform_async(message, @token, sender_name)
       end
 
       db_thread.update(last_message_index: messages[0]['messageEventDetail']['eventIndex'])

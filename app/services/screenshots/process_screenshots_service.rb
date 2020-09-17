@@ -42,7 +42,7 @@ module Screenshots
     def filtered_threads(threads)
       threads.select do |thread|
         thread['threadMembers'].any? do |messenger_info|
-          Player.active.find(message_thread_name: messenger_info['onlineId'])
+          Player.active.find { |player| player.message_thread_name == messenger_info['onlineId'] }
         end
       end
     end
