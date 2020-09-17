@@ -26,7 +26,7 @@ module Chat
 
       def success_message(result)
         [I18n.t(:success, scope: 'services.command_service.player_destroy',
-                name: result.player.telegram_username)]
+                          name: result.player.telegram_username)]
       end
 
       def error_message(result)
