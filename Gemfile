@@ -27,7 +27,7 @@ gem 'faraday_middleware', '~> 1.0.0'
 gem "typhoeus", '~> 1.3.0'
 
 gem 'oj', '~> 3.10.0'
-
+gem 'slim', '~> 4.0.0'
 gem 'pry', '~> 0.13.0'
 
 group :development, :test do
