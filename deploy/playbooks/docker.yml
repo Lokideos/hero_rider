@@ -1,0 +1,30 @@
+---
+- hosts: app
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: ensure apt cache is up to date
+      apt:
+        update_cache: yes
+        cache_valid_time: 86400
+    - name: ensure needed dependencies are installed
+      apt:
+        name: '{{ item }}'
+        state: latest
+      with_items:
+        - 'apt-transport-https'
+        - 'ca-certificates'
+        - 'curl'
+        - 'software-properties-common'
+    - name: Add Docker GPG apt key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+    - name: Ensure docker-ce is installed
+      apt:
+        name: docker-ce
+        state: latest
