@@ -4,3 +4,13 @@
 # Ignore local config files
 config/settings.local.yml
 config/settings/*.local.yml
+
+# Ignore env vars
+deploy/playbooks/files/env/vars
+
+# Ignore current hosts
+deploy/hosts
+
+# Ignore docker images
+*.tar
+*.tar.gz
