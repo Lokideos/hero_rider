@@ -46,7 +46,7 @@ module Watcher
 
     # TODO: refactoring needed
     def prepared_link
-      "https://#{Settings.fqdn}/trophy?" \
+      "https://#{Settings.web.fqdn}/trophy?" \
         "player_account=#{CGI.escape(@player.trophy_account)}&" \
         "trophy_title=#{CGI.escape(@trophy.trophy_name)}&" \
         "trophy_description=#{CGI.escape(@trophy.trophy_description)}&" \
