@@ -5,7 +5,7 @@ module PsnService
     extend Dry::Initializer[undefined: false]
     include HttpApi
 
-    option :url, default: proc { Settings.psn.endpoint }
+    option :url, default: proc { Settings.psn.auth.url }
     option :connection, default: proc { build_connection }
 
     private

@@ -13,7 +13,7 @@ module Chat
       def call
         message = ['<b>Загрузка скриншота</b>']
         message << 'Для загрузки скриншота отправьте его через psn на аккаунт бота.'
-        message << "На данный момент это <code>#{ENV['SCREENSHOT_BOT_NAME']}</code>."
+        message << "На данный момент это <code>#{Settings.telegram.screenshot_worker}</code>."
         message << 'Через какое-то время скриншот появится в чате с указанием на того, ' \
                    'кто его отправил.'
 

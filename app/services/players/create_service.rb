@@ -13,6 +13,7 @@ module Players
       @player = Player.new(telegram_username: @username)
       if @trophy_account.present?
         @player.trophy_account = @trophy_account
+        @player.message_thread_name = @trophy_account
         @player.on_watch = true
         RedisDb.redis.sadd('holy_rider:watcher:players', @trophy_account)
         RedisDb.redis.set("holy_rider:watcher:players:initial_load:#{@trophy_account}", 'initial')
