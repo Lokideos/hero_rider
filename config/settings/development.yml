@@ -1,7 +1,25 @@
-redis:
-  host: ''
-  port: ''
-  db: '2'
-  sidekiq_db: '4'
 db:
+  user: postgres
+  password: notsecure
   database: hero_rider_development
+redis:
+  db: 1
+  sidekiq_db: 2
+psn:
+  auth:
+    url: ''
+  trophies:
+    url: ''
+  game_trophies:
+    url: ''
+    endpoint: ''
+  profile:
+    url: ''
+    endpoint: ''
+  threads:
+    url: ''
+telegram:
+  bot_token: ''
+  admin_chat_id: # should be integer
+  main_chat_id: # should be integer
+  screenshot_worker: ''
