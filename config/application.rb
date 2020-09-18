@@ -4,15 +4,21 @@ class Application < Roda
   def self.root
     File.expand_path('..', __dir__)
   end
-  plugin(:not_found) { { error: 'Not found' } }
+
   plugin :environments
   plugin :json_parser
+  plugin(:not_found) { not_found_response }
+  include Errors
 
   route do |r|
     r.root do
       response['Content-Type'] = 'application/json'
       response.status = 200
       { status: 'ok' }.to_json
+    end
+
+    r.on 'trophy' do
+      r.run TrophiesRoute
     end
 
     r.get 'favicon.ico' do
