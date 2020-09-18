@@ -1,0 +1,15 @@
+---
+- hosts: app
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: ensure pip is installed
+      apt:
+        name: python3-pip
+    - name: ensure python dependencies are installed
+      pip:
+        name: docker
+    - name: ensure env file is uploaded
+      copy:
+        src: env/vars
+        dest: /home/{{ ansible_user }}/.env

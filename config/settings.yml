@@ -1,10 +1,13 @@
 app:
   name: 'hero_rider'
+web:
+  fqdn: 'fqdn'
 db:
   adapter: postgresql
   host: localhost
   port: 5432
-  user: postgres
-  password: notsecure
+redis:
+  host: localhost
+  port: 6379
 telegram:
   endpoint: 'https://api.telegram.org/bot'

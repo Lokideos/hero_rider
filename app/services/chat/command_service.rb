@@ -55,8 +55,7 @@ module Chat
 
     # TODO: combine multiple guard clauses to separate checks in methods
     def call
-      unless @allowed_public_chat_ids.include?(@current_chat_id.to_s) ||
-             @chat_type == 'private'
+      unless @allowed_public_chat_ids.include?(@current_chat_id) || @chat_type == 'private'
         return
       end
 
@@ -76,7 +75,7 @@ module Chat
       return unless [COMMON_COMMANDS, ADMIN_COMMANDS].flatten.include? command
 
       if ADMIN_COMMANDS.include? command
-        return unless @current_chat_id.to_s == @admin_chat_id
+        return unless @current_chat_id == @admin_chat_id
       end
 
       command = 'get_game_from_cache' if CACHED_GAMES.include? command

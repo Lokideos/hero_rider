@@ -1,0 +1,109 @@
+---
+- hosts: app
+  gather_facts: no
+  vars:
+    image: hero_rider
+  tasks:
+    - name: setup facts
+      set_fact:
+        timestamp: '{{ lookup("pipe", "date -u +%Y%m%s%H%M%S") }}'
+    - name: build docker image
+      delegate_to: 127.0.0.1
+      docker_image:
+        build:
+          path: ../../
+          pull: no
+        name: '{{ image }}'
+        source: build
+        force_source: yes
+    - name: save image to file
+      delegate_to: 127.0.0.1
+      docker_image:
+        name: '{{ image }}'
+        tag: latest
+        archive_path: '{{ image }}.tar'
+        source: local
+    - name: compress image
+      delegate_to: 127.0.0.1
+      archive:
+        path: '{{ image }}.tar'
+        dest: '{{ image }}.tar.gz'
+        remove: yes
+    - name: upload image
+      copy:
+        src: '{{ image }}.tar.gz'
+        dest: '/tmp/{{ timestamp }}-{{ image }}.tar.gz'
+    - name: extract image
+      shell: 'gunzip {{ timestamp }}-{{ image }}.tar.gz'
+      args:
+        chdir: /tmp
+    - name: load image
+      become: yes
+      docker_image:
+        name: '{{ image }}'
+        load_path: '/tmp/{{ timestamp }}-{{ image }}.tar'
+        source: load
+        force_source: yes
+    - name: remove image file
+      file:
+        path: '/tmp/{{ timestamp }}-{{ image }}.tar'
+        state: absent
+    - name: run database migrations
+      become: yes
+      run_once: yes
+      docker_container:
+        name: hero-rider-migrations
+        image: '{{ image }}'
+        network_mode: host
+        detach: no
+        cleanup: yes
+        command: bin/rake db:migrate
+        env_file: '/home/{{ ansible_user }}/.env'
+    - name: start hero_rider background backbone
+      become: yes
+      docker_container:
+        name: hero_rider_background
+        image: '{{ image }}'
+        network_mode: host
+        restart_policy: on-failure
+        restart_retries: 10
+        tty: yes
+        env_file: '/home/{{ ansible_user }}/.env'
+        command: 'bin/sidekiq -r ./config/environment.rb -C ./config/sidekiq/default.yml -c 1'
+        state: started
+    - name: start hero_rider chat container
+      become: yes
+      docker_container:
+        name: hero_rider_chat
+        image: '{{ image }}'
+        network_mode: host
+        restart_policy: on-failure
+        restart_retries: 10
+        tty: yes
+        env_file: '/home/{{ ansible_user }}/.env'
+        command: 'bin/chat_app'
+        state: started
+    - name: start hero_rider watcher container
+      become: yes
+      docker_container:
+        name: hero_rider_watcher
+        image: '{{ image }}'
+        network_mode: host
+        restart_policy: on-failure
+        restart_retries: 10
+        tty: yes
+        env_file: '/home/{{ ansible_user }}/.env'
+        command: 'bin/watcher_app'
+        state: started
+    - name: start hero_rider web container
+      become: yes
+      docker_container:
+        name: hero_rider_web
+        image: '{{ image }}'
+        network_mode: host
+        restart_policy: on-failure
+        restart_retries: 10
+        tty: yes
+        env_file: '/home/{{ ansible_user }}/.env'
+        command: 'bin/puma'
+        state: started

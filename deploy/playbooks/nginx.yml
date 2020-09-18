@@ -1,0 +1,21 @@
+---
+- hosts: nginx
+  become: yes
+  gather_facts: no
+  roles:
+    - common
+  tasks:
+    - name: ensure packages are installed
+      apt:
+        name: nginx
+    - name: ensure hero_rider nginx config us uploaded
+      template:
+        src: nginx/hero_rider.nginx.conf.j2
+        dest: /etc/nginx/conf.d/hero_rider.conf
+      notify:
+        - reload nginx
+  handlers:
+    - name: reload nginx
+      service:
+        name: nginx
+        state: reloaded
