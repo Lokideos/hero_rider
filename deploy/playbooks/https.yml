@@ -14,6 +14,11 @@
         dest: /etc/nginx/conf.d/hero_rider.conf
       notify:
         - reload nginx
+    - name: add ssl certificate renewal cron
+      cron:
+        name: "renew ssl certificate"
+        special_time: daily
+        job: "certbot renew"
   handlers:
     - name: reload nginx
       service:
