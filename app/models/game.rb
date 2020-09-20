@@ -170,8 +170,7 @@ class Game < Sequel::Model
     def top_game(game)
       return unless game.present?
 
-      # top_is_cached?(game) ? cached_game_top(game) : store_game_top(game)
-      store_game_top(game)
+      top_is_cached?(game) ? cached_game_top(game) : store_game_top(game)
     end
 
     def update_all_progress_caches
