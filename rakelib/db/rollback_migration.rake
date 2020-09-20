@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'sequel/core'
-require 'pry-byebug'
 
 namespace :db do
   desc 'Rollback migration'
