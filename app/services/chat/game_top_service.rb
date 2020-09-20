@@ -11,7 +11,7 @@ module Chat
     SECOND_PLACE_ICON = "\xF0\x9F\xA5\x88"
     THIRD_PLACE_ICON = "\xF0\x9F\xA5\x89"
     TURTLE_ICON = "\xF0\x9F\x90\xA2"
-    CLOCK_ICON = "\xE2\x8F\xB2"
+    CLOCK_ICON = "\xF0\x9F\x95\x97"
 
     param :top
 
