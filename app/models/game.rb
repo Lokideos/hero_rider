@@ -34,6 +34,18 @@ class Game < Sequel::Model
         .first
     end
 
+    def trigram_game_search(title)
+      safe_title = Sequel::Model.db.literal(title)
+      with_sql(
+        'SELECT g.trophy_service_id, g.title, g.platform ' \
+          'FROM games g ' \
+          'INNER JOIN game_acquisitions ga ON ga.game_id = g.id ' \
+          "WHERE (g.title % #{safe_title}) " \
+          "ORDER BY similarity(g.title, #{safe_title}), ga.last_updated_date DESC " \
+          'LIMIT 1'
+      ).first
+    end
+
     def precise_games_search(title)
       select(:trophy_service_id, :title, :platform)
         .where(Sequel.ilike(:title, "#{title}%"))
@@ -49,6 +61,17 @@ class Game < Sequel::Model
         .reverse_order(:last_updated_date)
         .all
     end
+
+    def trigram_games_search(title)
+      safe_title = Sequel::Model.db.literal(title)
+      with_sql(
+        'SELECT g.trophy_service_id, g.title, g.platform ' \
+          'FROM games g ' \
+          'INNER JOIN game_acquisitions ga ON ga.game_id = g.id ' \
+          "WHERE (g.title % #{safe_title}) " \
+          "ORDER BY similarity(g.title, #{safe_title}), ga.last_updated_date DESC"
+      )
+    end
   end
 
   class << self
@@ -56,6 +79,7 @@ class Game < Sequel::Model
       return unless title.length > 1
 
       games = (precise_games_search(title) + generic_games_search(title)).uniq[0..9]
+      games = trigram_games_search(title).uniq[0..9] unless games.present?
 
       games.each_with_index do |game, index|
         RedisDb.redis.setex("holy_rider:top:#{player_name}:games:#{index + 1}",
