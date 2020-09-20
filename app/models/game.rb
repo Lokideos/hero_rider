@@ -190,7 +190,7 @@ class Game < Sequel::Model
 
     def add_platinum_speed(progresses)
       sorted_platinum_progresses(progresses).first.platinum_speed = FASTEST_PLATINUM_MARKER
-      return unless sorted_platinum_progresses(progresses).size < 2
+      return if sorted_platinum_progresses(progresses).size < 2
 
       sorted_platinum_progresses(progresses).last.platinum_speed = SLOWEST_PLATINUM_MARKER
     end
