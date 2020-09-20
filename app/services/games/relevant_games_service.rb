@@ -11,6 +11,7 @@ module Games
 
     def call
       @games_list = Game.relevant_games(@game_title, @player_name)
+                        .map { |game| "#{game.title} #{game.platform}" }
 
       valid?(@games_list) ? @games_list : fail_t!(:not_found)
     end

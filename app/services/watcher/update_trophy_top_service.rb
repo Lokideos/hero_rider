@@ -13,9 +13,7 @@ module Watcher
       @player.update_trophy_points
       @player.update_rare_points
 
-      game = @trophy.game
-      prepared_game = Game.find_exact_game(game.title, game.platform)
-      Game.store_game_top(prepared_game)
+      Game.store_game_top(@trophy.game)
     end
   end
 end
