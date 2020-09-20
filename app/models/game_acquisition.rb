@@ -7,9 +7,8 @@ class GameAcquisition < Sequel::Model
   dataset_module do
     def find_progresses(game_id)
       where(game_id: game_id)
-        .left_join(:players, id: :player_id)
-        .order(:progress)
-        .reverse
+        .inner_join(:players, id: :player_id)
+        .reverse_order(:progress)
         .all
     end
   end
