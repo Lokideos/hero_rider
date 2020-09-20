@@ -188,14 +188,20 @@ class Game < Sequel::Model
     end
 
     def add_platinum_speed(progresses)
-      sorted_platinum_progresses(progresses).first.platinum_speed = FASTEST_PLATINUM_MARKER
-      return if sorted_platinum_progresses(progresses).size < 2
+      sorted_progresses = sorted_platinum_progresses(progresses)
+      return unless sorted_progresses.present?
 
-      sorted_platinum_progresses(progresses).last.platinum_speed = SLOWEST_PLATINUM_MARKER
+      sorted_progresses.first.platinum_speed = FASTEST_PLATINUM_MARKER
+      return if sorted_progresses.size < 2
+
+      sorted_progresses.last.platinum_speed = SLOWEST_PLATINUM_MARKER
     end
 
     def add_platinum_placement(progresses)
-      sorted_platinum_progresses(progresses)[0..2].each_with_index do |progress, index|
+      sorted_progresses = sorted_platinum_progresses(progresses)
+      return unless sorted_progresses.present?
+
+      sorted_progresses[0..2].each_with_index do |progress, index|
         progress.platinum_placement = index + 1
       end
     end
