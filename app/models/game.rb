@@ -8,8 +8,9 @@ class Game < Sequel::Model
     gold: 90,
     platinum: 180
   }.freeze
-
   GAME_CACHE_EXPIRE = 300
+  SLOWEST_PLATINUM_MARKER = 'slowest'
+  FASTEST_PLATINUM_MARKER = 'fastest'
 
   one_to_many :game_acquisitions
   one_to_many :trophies
@@ -17,8 +18,8 @@ class Game < Sequel::Model
 
   dataset_module do
     def precise_game_search(title)
-      select(:trophy_service_id, :title, :platform)
-        .where(Sequel.ilike(:title, "#{title}%"))
+      select(:game_id, :trophy_service_id, :title, :platform)
+      where(Sequel.ilike(:title, "#{title}%"))
         .inner_join(:game_acquisitions, game_id: :id)
         .reverse_order(:last_updated_date)
         .limit(1)
@@ -26,8 +27,8 @@ class Game < Sequel::Model
     end
 
     def generic_game_search(title)
-      select(:trophy_service_id, :title, :platform)
-        .where(Sequel.ilike(:title, "%#{title.split(' ')[0..2].join('%')}%"))
+      select(:game_id, :trophy_service_id, :title, :platform)
+      where(Sequel.ilike(:title, "%#{title.split(' ')[0..2].join('%')}%"))
         .inner_join(:game_acquisitions, game_id: :id)
         .reverse_order(:last_updated_date)
         .limit(1)
@@ -37,7 +38,7 @@ class Game < Sequel::Model
     def trigram_game_search(title)
       safe_title = Sequel::Model.db.literal(title)
       with_sql(
-        'SELECT g.trophy_service_id, g.title, g.platform ' \
+        'SELECT g.id game_id, g.icon_url, g.trophy_service_id, g.title, g.platform ' \
           'FROM games g ' \
           'INNER JOIN game_acquisitions ga ON ga.game_id = g.id ' \
           "WHERE (g.title % #{safe_title}) " \
@@ -47,7 +48,7 @@ class Game < Sequel::Model
     end
 
     def precise_games_search(title)
-      select(:trophy_service_id, :title, :platform)
+      select(:game_id, :trophy_service_id, :title, :platform)
         .where(Sequel.ilike(:title, "#{title}%"))
         .inner_join(:game_acquisitions, game_id: :id)
         .reverse_order(:last_updated_date)
@@ -55,7 +56,7 @@ class Game < Sequel::Model
     end
 
     def generic_games_search(title)
-      select(:trophy_service_id, :title, :platform)
+      select(:game_id, :trophy_service_id, :title, :platform)
         .where(Sequel.ilike(:title, "%#{title.split(' ')[0..2].join('%')}%"))
         .inner_join(:game_acquisitions, game_id: :id)
         .reverse_order(:last_updated_date)
@@ -65,7 +66,7 @@ class Game < Sequel::Model
     def trigram_games_search(title)
       safe_title = Sequel::Model.db.literal(title)
       with_sql(
-        'SELECT g.trophy_service_id, g.title, g.platform ' \
+        'SELECT g.id game_id, g.trophy_service_id, g.title, g.platform ' \
           'FROM games g ' \
           'INNER JOIN game_acquisitions ga ON ga.game_id = g.id ' \
           "WHERE (g.title % #{safe_title}) " \
@@ -114,19 +115,27 @@ class Game < Sequel::Model
 
     # TODO: this should be on object level - not on class level
     def store_game_top(game)
-      progresses = GameAcquisition.find_progresses(game.id)
-      platinum = Trophy.find(game_id: game.id, trophy_type: 'platinum')
+      game_id = game.values[:game_id] || game.id
+      progresses = GameAcquisition.find_progresses(game_id)
 
-      grouped_progresses = progresses.map do |progress|
+      prepared_progresses = progresses.map do |progress|
+        platinum_earned_date = TrophyAcquisition
+                               .platinum_game_acquisition(game_id, progress.player_id)&.earned_at
+        first_trophy_earned_date = TrophyAcquisition
+                                   .first_game_acquisition(game_id, progress.player_id)&.earned_at
         OpenStruct.new(
           trophy_account: progress.values.dig(:trophy_account),
           progress: progress.values.dig(:progress),
-          platinum_earning_date: TrophyAcquisition.find(
-            trophy_id: platinum&.id,
-            player_id: progress.values.dig(:player_id)
-          )&.earned_at
+          first_trophy_earned_date: first_trophy_earned_date,
+          platinum_earning_date: platinum_earned_date,
+          platinum_placement: nil,
+          platinum_speed: nil
         )
-      end.group_by(&:progress)
+      end
+
+      add_platinum_placement(prepared_progresses)
+      add_platinum_speed(prepared_progresses)
+      grouped_progresses = prepared_progresses.group_by(&:progress)
 
       grouped_progresses.each_key do |progress_group|
         player_progresses = grouped_progresses[progress_group]
@@ -134,7 +143,7 @@ class Game < Sequel::Model
           player_progresses.select(&:platinum_earning_date).sort do |left_player, right_player|
             left_player.platinum_earning_date <=> right_player.platinum_earning_date
           end,
-          player_progresses.select { |player_progress| player_progress.platinum_earning_date.nil? }
+          player_progresses.select { |progress| progress.platinum_earning_date.blank? }
         ].flatten
       end
       game_top = {
@@ -147,7 +156,9 @@ class Game < Sequel::Model
           {
             'trophy_account' => progress.trophy_account,
             'progress' => progress.progress,
-            'platinum_earning_date' => progress.platinum_earning_date
+            'platinum_earning_date' => progress.platinum_earning_date,
+            'platinum_placement' => progress.platinum_placement,
+            'platinum_speed' => progress.platinum_speed
           }
         end
       }
@@ -175,6 +186,38 @@ class Game < Sequel::Model
 
     def top_is_cached?(game)
       RedisDb.redis.exists?("holy_rider:top:game:#{game[:trophy_service_id]}")
+    end
+
+    def add_platinum_speed(progresses)
+      sorted_progresses = sorted_by_speed_progresses(progresses)
+      return unless sorted_progresses.present?
+
+      sorted_progresses.first.platinum_speed = FASTEST_PLATINUM_MARKER
+      return if sorted_progresses.size < 2
+
+      sorted_progresses.last.platinum_speed = SLOWEST_PLATINUM_MARKER
+    end
+
+    def add_platinum_placement(progresses)
+      sorted_progresses = sorted_platinum_progresses(progresses)
+      return unless sorted_progresses.present?
+
+      sorted_progresses[0..2].each_with_index do |progress, index|
+        progress.platinum_placement = index + 1
+      end
+    end
+
+    def sorted_platinum_progresses(progresses)
+      progresses.select(&:platinum_earning_date).sort do |left_progress, right_progress|
+        left_progress.platinum_earning_date <=> right_progress.platinum_earning_date
+      end
+    end
+
+    def sorted_by_speed_progresses(progresses)
+      progresses.select(&:platinum_earning_date).sort do |left_progress, right_progress|
+        (left_progress.platinum_earning_date - left_progress.first_trophy_earned_date) <=>
+          (right_progress.platinum_earning_date - right_progress.first_trophy_earned_date)
+      end
     end
   end
 
