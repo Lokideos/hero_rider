@@ -117,16 +117,17 @@ class Game < Sequel::Model
     def store_game_top(game)
       game_id = game.values[:game_id] || game.id
       progresses = GameAcquisition.find_progresses(game_id)
-      platinum = Trophy.find(game_id: game_id, trophy_type: 'platinum')
 
       prepared_progresses = progresses.map do |progress|
+        platinum_earned_date = TrophyAcquisition
+                               .platinum_game_acquisition(game_id, progress.player_id)&.earned_at
+        first_trophy_earned_date = TrophyAcquisition
+                                   .first_game_acquisition(game_id, progress.player_id)&.earned_at
         OpenStruct.new(
           trophy_account: progress.values.dig(:trophy_account),
           progress: progress.values.dig(:progress),
-          platinum_earning_date: TrophyAcquisition.find(
-            trophy_id: platinum&.id,
-            player_id: progress.values.dig(:player_id)
-          )&.earned_at,
+          first_trophy_earned_date: first_trophy_earned_date,
+          platinum_earning_date: platinum_earned_date,
           platinum_placement: nil,
           platinum_speed: nil
         )
@@ -188,7 +189,7 @@ class Game < Sequel::Model
     end
 
     def add_platinum_speed(progresses)
-      sorted_progresses = sorted_platinum_progresses(progresses)
+      sorted_progresses = sorted_by_speed_progresses(progresses)
       return unless sorted_progresses.present?
 
       sorted_progresses.first.platinum_speed = FASTEST_PLATINUM_MARKER
@@ -209,6 +210,13 @@ class Game < Sequel::Model
     def sorted_platinum_progresses(progresses)
       progresses.select(&:platinum_earning_date).sort do |left_progress, right_progress|
         left_progress.platinum_earning_date <=> right_progress.platinum_earning_date
+      end
+    end
+
+    def sorted_by_speed_progresses(progresses)
+      progresses.select(&:platinum_earning_date).sort do |left_progress, right_progress|
+        (left_progress.platinum_earning_date - left_progress.first_trophy_earned_date) <=>
+          (right_progress.platinum_earning_date - right_progress.first_trophy_earned_date)
       end
     end
   end
