@@ -20,6 +20,7 @@ Sequel.migration do
       column :updated_at, "timestamp without time zone"
       
       index [:title]
+      index [:title], :name=>:games_title_trgm_index
       index [:trophy_service_id]
     end
     

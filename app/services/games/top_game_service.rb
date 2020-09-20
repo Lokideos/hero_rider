@@ -11,6 +11,7 @@ module Games
     def call
       game = Game.precise_game_search(@game_title)
       game = Game.generic_game_search(@game_title) unless game.present?
+      game = Game.trigram_game_search(@game_title) unless game.present?
       @game_top = Game.top_game(game)
 
       valid?(@game_top) ? @game_top : fail_t!(:not_found)
