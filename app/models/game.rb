@@ -139,10 +139,6 @@ class Game < Sequel::Model
       top_is_cached?(game) ? cached_game_top(game) : store_game_top(game)
     end
 
-    def non_exact_full_title_search(title)
-      Game.where(title: /^#{title}$/i).left_join(:game_acquisitions, game_id: :id).first
-    end
-
     def update_all_progress_caches
       Game.all.each do |game|
         Game.store_game_top(game)
