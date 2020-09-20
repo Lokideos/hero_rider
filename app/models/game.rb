@@ -8,8 +8,9 @@ class Game < Sequel::Model
     gold: 90,
     platinum: 180
   }.freeze
-
   GAME_CACHE_EXPIRE = 300
+  SLOWEST_PLATINUM_MARKER = 'slowest'
+  FASTEST_PLATINUM_MARKER = 'fastest'
 
   one_to_many :game_acquisitions
   one_to_many :trophies
@@ -126,11 +127,13 @@ class Game < Sequel::Model
             trophy_id: platinum&.id,
             player_id: progress.values.dig(:player_id)
           )&.earned_at,
-          platinum_placement: nil
+          platinum_placement: nil,
+          platinum_speed: nil
         )
       end
 
       add_platinum_placement(prepared_progresses)
+      add_platinum_speed(prepared_progresses)
       grouped_progresses = prepared_progresses.group_by(&:progress)
 
       grouped_progresses.each_key do |progress_group|
@@ -153,7 +156,8 @@ class Game < Sequel::Model
             'trophy_account' => progress.trophy_account,
             'progress' => progress.progress,
             'platinum_earning_date' => progress.platinum_earning_date,
-            'platinum_placement' => progress.platinum_placement
+            'platinum_placement' => progress.platinum_placement,
+            'platinum_speed' => progress.platinum_speed
           }
         end
       }
@@ -182,6 +186,13 @@ class Game < Sequel::Model
 
     def top_is_cached?(game)
       RedisDb.redis.exists?("holy_rider:top:game:#{game[:trophy_service_id]}")
+    end
+
+    def add_platinum_speed(progresses)
+      sorted_platinum_progresses(progresses).first.platinum_speed = FASTEST_PLATINUM_MARKER
+      return unless sorted_platinum_progresses(progresses).size < 2
+
+      sorted_platinum_progresses(progresses).last.platinum_speed = SLOWEST_PLATINUM_MARKER
     end
 
     def add_platinum_placement(progresses)
