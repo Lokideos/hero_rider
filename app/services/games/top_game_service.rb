@@ -9,7 +9,9 @@ module Games
     attr_reader :game_top
 
     def call
-      @game_top = Game.top_game(@game_title)
+      game = Game.precise_game_search(@game_title)
+      game = Game.generic_game_search(@game_title) unless game.present?
+      @game_top = Game.top_game(game)
 
       valid?(@game_top) ? @game_top : fail_t!(:not_found)
     end
