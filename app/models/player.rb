@@ -64,6 +64,50 @@ class Player < Sequel::Model
         .where(trophy_service_id: service_ids)
         .map(:last_updated_date)
     end
+
+    def uniq_plat_count(trophy_account)
+      safe_account = Sequel::Model.db.literal(trophy_account)
+      with_sql(
+        "SELECT COUNT(*) unique_platinum_count
+         FROM (
+           SELECT g.title
+           FROM players p
+           INNER JOIN trophy_acquisitions ta ON ta.player_id = p.id
+           INNER JOIN trophies t ON t.id = ta.trophy_id
+           INNER JOIN games g ON g.id = t.game_id
+           WHERE p.trophy_account = #{safe_account} AND t.trophy_type = 'platinum'
+           EXCEPT
+           SELECT g.title
+           FROM players p
+           INNER JOIN trophy_acquisitions ta ON ta.player_id = p.id
+           INNER JOIN trophies t ON t.id = ta.trophy_id
+           INNER JOIN games g ON g.id = t.game_id
+           WHERE p.trophy_account != #{safe_account} AND t.trophy_type = 'platinum'
+         ) AS games_with_uniq_plats"
+      ).map(:unique_platinum_count).first
+    end
+
+    def uniq_plat_games(trophy_account)
+      safe_account = Sequel::Model.db.literal(trophy_account)
+      with_sql(
+        "SELECT games_with_uniq_plats.title
+         FROM (
+           SELECT g.title
+           FROM players p
+           INNER JOIN trophy_acquisitions ta ON ta.player_id = p.id
+           INNER JOIN trophies t ON t.id = ta.trophy_id
+           INNER JOIN games g ON g.id = t.game_id
+           WHERE p.trophy_account = #{safe_account} AND t.trophy_type = 'platinum'
+           EXCEPT
+           SELECT g.title
+           FROM players p
+           INNER JOIN trophy_acquisitions ta ON ta.player_id = p.id
+           INNER JOIN trophies t ON t.id = ta.trophy_id
+           INNER JOIN games g ON g.id = t.game_id
+           WHERE p.trophy_account != #{safe_account} AND t.trophy_type = 'platinum'
+         ) AS games_with_uniq_plats"
+      ).map(:title)
+    end
   end
 
   def self.trophy_top
@@ -181,13 +225,7 @@ class Player < Sequel::Model
       games: games,
       trophy_level: trophy_level,
       level_up_progress: level_up_progress,
-      unique_platinums: unique_platinum_count
+      unique_platinums: Player.uniq_plat_count(trophy_account)
     }
-  end
-
-  def unique_platinum_count
-    platinum_trophy_ids = trophies.select { |trophy| trophy.trophy_type == 'platinum' }.map(&:id)
-    acquisitions = TrophyAcquisition.where(trophy_id: platinum_trophy_ids).all.group_by(&:trophy_id)
-    acquisitions.select { |_trophy_id, player_with_trophy| player_with_trophy.size == 1 }.size
   end
 end
