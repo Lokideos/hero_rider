@@ -32,7 +32,9 @@ module Chat
       top
       top_rare
       me
+      me_plats
       stats
+      stats_plats
       trophy_ping_on
       trophy_ping_off
       last
@@ -40,6 +42,8 @@ module Chat
       man_games
       man_screenshot
     ].concat(CACHED_GAMES).freeze
+
+    CUSTOM_COMMANDS = %w[stats_plats_].freeze
 
     EXPIRE_COMMANDS = %w[games].freeze
 
@@ -55,9 +59,7 @@ module Chat
 
     # TODO: combine multiple guard clauses to separate checks in methods
     def call
-      unless @allowed_public_chat_ids.include?(@current_chat_id) || @chat_type == 'private'
-        return
-      end
+      return unless @allowed_public_chat_ids.include?(@current_chat_id) || @chat_type == 'private'
 
       result = Players::AuthenticateService.call(@command[@message_type]['from']['username'])
 
@@ -68,20 +70,23 @@ module Chat
 
       command = @command[@message_type]['text'].split(' ').first[1..]
       if command.include? '@'
-        return unless command.include? 'holy_rider_bot'
+        return unless command.include? Settings.telegram.bot_name
 
         command = command.split('@').first
       end
-      return unless [COMMON_COMMANDS, ADMIN_COMMANDS].flatten.include? command
+      unless (COMMON_COMMANDS + ADMIN_COMMANDS).include?(command) ||
+             CUSTOM_COMMANDS.any? { |custom_command| command.match?(/^#{custom_command}.*/) }
+        return
+      end
 
       if ADMIN_COMMANDS.include? command
         return unless @current_chat_id == @admin_chat_id
       end
 
       command = 'get_game_from_cache' if CACHED_GAMES.include? command
-      messages = Kernel.const_get(
-        "Chat::Command::#{prepared_command(command)}"
-      ).new(@command, @message_type).call.message
+      command = 'stats_plats_from_profile' if command.match?(/^stats_plats_.*$/)
+      messages = Kernel.const_get("Chat::Command::#{prepared_command(command)}")
+                       .call(@command, @message_type).message
 
       chat_id = ADMIN_COMMANDS.include?(command) ? @admin_chat_id : @current_chat_id
 

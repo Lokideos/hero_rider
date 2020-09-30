@@ -24,6 +24,7 @@ psn:
   threads:
     url: <%= ENV.fetch('TROPHY_THREADS_URL') %>
 telegram:
+  bot_name: <%= ENV.fetch('TELEGRAM_BOT_NAME') %>
   bot_token: <%= ENV.fetch('TELEGRAM_BOT_TOKEN') %>
   admin_chat_id: <%= ENV.fetch('TELEGRAM_ADMIN_CHAT_ID') %>
   main_chat_id: <%= ENV.fetch('TELEGRAM_MAIN_CHAT_ID') %>
