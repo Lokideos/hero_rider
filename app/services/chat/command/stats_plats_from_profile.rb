@@ -14,7 +14,13 @@ module Chat
 
       def call
         text = @command[@message_type]['text']
-        player_name = text[COMMAND_PREFIX_LENGTH..-1]
+        text_without_prefix = text[COMMAND_PREFIX_LENGTH..]
+        player_name = if text_without_prefix.include? Settings.telegram.bot_name
+                        text_without_prefix.split('@').first
+                      else
+                        text_without_prefix
+                      end
+
         result = ::Players::FindPlayerService.call(player_name)
         return @message = ['Игрок не найден'] if result.failure?
 
