@@ -16,7 +16,10 @@ module Chat
         message << '/top - выводит топ по трофеям среди игроков'
         message << '/top_rare - выводит топ по редким трофеям среди игроков'
         message << '/me - выводит информацию о запросившем игроке'
+        message << '/me_plats - выводит уникальные платины запросившего игрока'
         message << '/stats [@telegram_name] - выводит информацию об игроке [telegram_name]'
+        message << '/stats_plats [@telegram_name] - выводит уникальные платины ' \
+                   'игрока [telegram_name]'
         message << '/find [game_title] - поиск одной игры'
         message << '/games [game_title] - поиск нескольких игр'
         message << '/trophy_ping_on - включает оповещения о новых трофеях'
