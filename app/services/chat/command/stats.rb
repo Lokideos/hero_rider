@@ -42,6 +42,7 @@ module Chat
         message << "<code>Количество игр      #{games_count}</code>"
         message << "<code>Всего трофеев       #{trophy_total}</code>"
         message << "<code>Уникальные платины  #{uniq_plats}</code>"
+        message << "<code>Вывести платины: </code> /stats_plats_#{telegram_name}"
         message << "<b>\nТрофеи:</b>"
         message << "<code>Платина             #{plat_count}</code>"
         message << "<code>Золото              #{gold_count}</code>"
