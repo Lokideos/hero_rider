@@ -70,7 +70,7 @@ module Chat
 
       command = @command[@message_type]['text'].split(' ').first[1..]
       if command.include? '@'
-        return unless command.include? 'holy_rider_bot'
+        return unless command.include? Settings.telegram.bot_name
 
         command = command.split('@').first
       end

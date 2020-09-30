@@ -19,6 +19,7 @@ psn:
   threads:
     url: ''
 telegram:
+  bot_name: ''
   bot_token: ''
   admin_chat_id: # should be integer
   main_chat_id: # should be integer
