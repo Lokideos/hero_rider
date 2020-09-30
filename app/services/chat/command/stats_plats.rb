@@ -2,7 +2,7 @@
 
 module Chat
   module Command
-    class MePlats
+    class StatsPlats
       prepend BasicService
 
       param :command
@@ -11,8 +11,10 @@ module Chat
       attr_reader :message
 
       def call
-        result = ::Players::FindPlayerService.call(@command['message']['from']['username'])
-        return if result.failure?
+        text = @command[@message_type]['text']
+        player_name = text.include?('@') ? text.split(' ')[1][1..] : text.split(' ')[1]
+        result = ::Players::FindPlayerService.call(player_name)
+        return @message = ['Игрок не найден'] if result.failure?
 
         trophy_account = result.player.trophy_account
         telegram_name = result.player.telegram_username
@@ -22,7 +24,9 @@ module Chat
         unique_platinum_games.each do |game|
           message << game
         end
-        message = ['У вас нет уникальных платин'] if unique_platinum_games.empty?
+        if unique_platinum_games.empty?
+          message = ["У игрока #{trophy_account} (@#{telegram_name}) нет уникальных платин"]
+        end
 
         @message = [message.join("\n")]
       end
