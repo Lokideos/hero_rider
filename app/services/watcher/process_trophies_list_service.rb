@@ -144,7 +144,7 @@ module Watcher
       ).zero?
         RedisDb.redis.del("holy_rider:watcher:players:initial_load:#{@player.trophy_account}")
         # TODO: update only game tops of this player instead of all game tops
-        Workers::ProcessGameTopsUpdate.perform_async
+        Workers::ProcessSingleGameTopUpdate.perform_async(@game_id)
       end
     end
   end
