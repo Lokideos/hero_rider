@@ -6,7 +6,7 @@ class Game < Sequel::Model
     bronze: 15,
     silver: 30,
     gold: 90,
-    platinum: 180
+    platinum: 300
   }.freeze
   GAME_CACHE_EXPIRE = 300
   SLOWEST_PLATINUM_MARKER = 'slowest'

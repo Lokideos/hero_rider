@@ -6,19 +6,19 @@ class Player < Sequel::Model
       bronze: 45,
       silver: 90,
       gold: 270,
-      platinum: 2700
+      platinum: 4500
     },
     1 => {
       bronze: 15,
       silver: 30,
       gold: 90,
-      platinum: 180
+      platinum: 300
     },
     2 => {
       bronze: 15,
       silver: 30,
       gold: 90,
-      platinum: 180
+      platinum: 300
     },
     3 => {
       bronze: 0,
@@ -32,7 +32,7 @@ class Player < Sequel::Model
     bronze: 15,
     silver: 30,
     gold: 90,
-    platinum: 180
+    platinum: 300
   }.freeze
 
   one_to_many :game_acquisitions
