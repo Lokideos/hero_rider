@@ -16,6 +16,7 @@ module Watcher
       PsnService::HttpClient.new(url: Settings.psn.profile.url)
     }
 
+    # TODO: return after get ps5 trophies and fix it
     def call
       trophy_summary = @client.request_trophy_summary(player_name: @player_name, token: @token)
       @player.update(trophy_level: trophy_summary['level'],
@@ -25,6 +26,7 @@ module Watcher
       @player.delete_hidden_trophies
 
       # TODO: get rid of instance var get
+      # TODO: return after get ps5 trophies and fix it
       TROPHY_TYPES.each do |trophy_type|
         instance_variable_set("@hidden_#{trophy_type}_trophies",
                               trophy_summary['earnedTrophies'][trophy_type] -
