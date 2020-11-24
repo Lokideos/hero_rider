@@ -6,7 +6,7 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem 'rake', '~> 13.0.0'
 gem 'roda', '~> 3.34.0'
-gem 'puma', '~> 4.3.0'
+gem 'puma', '~> 5.0.0'
 
 gem 'i18n', '~> 1.8.0'
 gem 'config', '~> 2.2.0'
