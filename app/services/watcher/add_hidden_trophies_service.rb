@@ -13,7 +13,7 @@ module Watcher
       RedisDb.redis.get("holy_rider:trophy_hunter:#{@hunter_name}:access_token")
     }
     option :client, default: proc {
-      PsnService::V1::HttpClient.new(url: Settings.psn.profile.url)
+      PsnService::V1::HttpClient.new(url: Settings.psn.v1.profile.url)
     }
 
     # TODO: return after get ps5 trophies and fix it

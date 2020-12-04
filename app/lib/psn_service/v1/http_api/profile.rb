@@ -5,7 +5,7 @@ module PsnService
     module HttpApi
       module Profile
         def request_trophy_summary(player_name:, token:)
-          endpoint = player_name + Settings.psn.profile.endpoint
+          endpoint = player_name + Settings.psn.v1.profile.endpoint
           response = connection.get(endpoint) do |request|
             request.headers = profile_common_headers(token)
             request.params = trophy_summary_params(player_name)

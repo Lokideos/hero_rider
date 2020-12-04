@@ -32,7 +32,7 @@ module PsnService
         end
 
         def request_game_trophy_list(player_name:, token:, game_id:, extended: false)
-          endpoint = game_id + Settings.psn.game_trophies.endpoint
+          endpoint = game_id + Settings.psn.v1.game_trophies.endpoint
           fields = extended ? "@default,#{EXTENDED_TROPHY_FIELDS.join(',')}" : '@default'
 
           response = connection.get(endpoint) do |request|
