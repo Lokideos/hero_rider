@@ -7,7 +7,7 @@ module Psn
     option :player_name
     option :token
     option :client, default: proc {
-      PsnService::HttpClient.new(url: Settings.psn.trophies.url)
+      PsnService::V1::HttpClient.new(url: Settings.psn.trophies.url)
     }
 
     attr_reader :result

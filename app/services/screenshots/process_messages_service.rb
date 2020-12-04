@@ -6,7 +6,7 @@ module Screenshots
 
     option :message_thread
     option :token
-    option :client, default: proc { PsnService::HttpClient.new(url: Settings.psn.threads.url) }
+    option :client, default: proc { PsnService::V1::HttpClient.new(url: Settings.psn.threads.url) }
 
     def call
       db_thread = MessageThread.find(message_thread_id: @message_thread['threadId'])

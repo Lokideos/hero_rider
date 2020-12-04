@@ -9,7 +9,7 @@ module Watcher
     option :game
     option :new_trophy_ids
     option :client, default: proc {
-      PsnService::HttpClient.new(url: Settings.psn.game_trophies.url)
+      PsnService::V1::HttpClient.new(url: Settings.psn.game_trophies.url)
     }
 
     def call

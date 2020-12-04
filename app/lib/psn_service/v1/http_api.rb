@@ -6,10 +6,12 @@ require_relative 'http_api/profile'
 require_relative 'http_api/threads'
 
 module PsnService
-  module HttpApi
-    include Auth
-    include Trophies
-    include Profile
-    include Threads
+  module V1
+    module HttpApi
+      include Auth
+      include Trophies
+      include Profile
+      include Threads
+    end
   end
 end

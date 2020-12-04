@@ -5,7 +5,7 @@ module Psn
     prepend BasicService
 
     param :hunter
-    option :client, default: proc { PsnService::HttpClient.new }
+    option :client, default: proc { PsnService::V1::HttpClient.new }
 
     attr_reader :access_token
 

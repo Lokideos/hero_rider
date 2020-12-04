@@ -9,7 +9,7 @@ module Watcher
     option :updates
     option :player, default: proc { Player.find(trophy_account: @player_name) }
     option :client, default: proc {
-      PsnService::HttpClient.new(url: Settings.psn.game_trophies.url)
+      PsnService::V1::HttpClient.new(url: Settings.psn.game_trophies.url)
     }
 
     def call

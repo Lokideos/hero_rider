@@ -14,7 +14,7 @@ module Watcher
     option :player, default: proc { Player.find(id: @player_id) }
     option :game, default: proc { Game.find(id: @game_id) }
     option :client, default: proc {
-      PsnService::HttpClient.new(url: Settings.psn.game_trophies.url)
+      PsnService::V1::HttpClient.new(url: Settings.psn.game_trophies.url)
     }
 
     def call

@@ -6,7 +6,7 @@ module Psn
 
     param :hunter
     param :sso_cookie
-    option :client, default: proc { PsnService::HttpClient.new }
+    option :client, default: proc { PsnService::V1::HttpClient.new }
 
     def call
       grant_code_response = @client.request_grant_code(hunter: @hunter, sso_cookie: @sso_cookie)
