@@ -50,6 +50,7 @@ Sequel.migration do
       column :level_up_progress, "integer", :default=>0
       column :trophy_ping, "boolean", :default=>false
       column :message_thread_name, "text"
+      column :trophy_user_id, "text"
       
       index [:admin]
       index [:on_watch]

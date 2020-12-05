@@ -22,15 +22,21 @@ module Watcher
 
     RedisDb.redis.sadd('holy_rider:watcher:hunters', hunter_names)
 
-    active_trophy_accounts = Player.active_trophy_accounts
+    active_trophy_accounts = Player.active_trophy_accounts.select do |player|
+      player.trophy_user_id.present?
+    end
     if active_trophy_accounts.empty?
-      p 'There are no players'
+      p 'There are no active players with trophy_user_id'
       sleep(1)
       return
     end
 
     # TODO: add user_ids and iterate other them; get them(!)
-    RedisDb.redis.sadd('holy_rider:watcher:players', active_trophy_accounts)
+    RedisDb.redis.sadd('holy_rider:watcher:players', active_trophy_accounts.map(&:trophy_account))
+    active_trophy_accounts.each do |player|
+      RedisDb.redis.set("holy_rider:watcher:players:#{player.trophy_account}:trophy_user_id",
+                        player.trophy_user_id)
+    end
 
     RedisDb.redis.smembers('holy_rider:watcher:players').each do |player|
       if RedisDb.redis.get("holy_rider:watcher:players:initial_load:#{player}") == 'in_progress'
@@ -66,7 +72,7 @@ module Watcher
 
       token = RedisDb.redis.get("holy_rider:trophy_hunter:#{hunter_name}:access_token")
       # TODO: get user_id before this
-      user_id = RedisDb.redis.get("holy_rider:watcher:players:#{player}:user_id")
+      user_id = RedisDb.redis.get("holy_rider:watcher:players:#{player}:trophy_user_id")
       psn_updates = Psn::TrophyUpdatesService.call(player_name: player, user_id: user_id,
                                                    token: token).result
 

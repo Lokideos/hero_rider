@@ -54,7 +54,7 @@ class Player < Sequel::Model
     end
 
     def active_trophy_accounts
-      where(on_watch: true).map(:trophy_account)
+      where(on_watch: true).all
     end
 
     def last_updated_game_ids(trophy_account, service_ids)
