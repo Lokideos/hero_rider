@@ -7,7 +7,7 @@ module PsnService
             request.headers = {
               'Content-Type' => 'application/x-www-form-urlencoded',
               'User-Agent' => 'com.sony.snei.np.android.sso.share.oauth.versa.USER_AGENT',
-              'Authorization' => "Basic #{hunter.authorization.token}"
+              'Authorization' => "Basic #{hunter.authorization_token}"
             }
             request.body = {
               'token_format': 'jwt',
