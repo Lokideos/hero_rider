@@ -29,6 +29,7 @@ module Watcher
       return
     end
 
+    # TODO: add user_ids and iterate other them; get them(!)
     RedisDb.redis.sadd('holy_rider:watcher:players', active_trophy_accounts)
 
     RedisDb.redis.smembers('holy_rider:watcher:players').each do |player|
@@ -64,7 +65,10 @@ module Watcher
       end
 
       token = RedisDb.redis.get("holy_rider:trophy_hunter:#{hunter_name}:access_token")
-      psn_updates = Psn::TrophyUpdatesService.call(player_name: player, token: token).result
+      # TODO: get user_id before this
+      user_id = RedisDb.redis.get("holy_rider:watcher:players:#{player}:user_id")
+      psn_updates = Psn::TrophyUpdatesService.call(player_name: player, user_id: user_id,
+                                                   token: token).result
 
       if psn_updates.dig('error', 'message') == 'Access token required'
         p 'Watcher: Refresh token has expired'
