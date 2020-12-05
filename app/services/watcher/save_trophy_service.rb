@@ -38,8 +38,12 @@ module Watcher
 
       Chat::SendChatMessageService.call(message)
       return unless @trophy.trophy_type == 'platinum'
+      size = RedisDb.redis.scard('holy_rider:delayed_messages')
+      RedisDb.redis.sadd('holy_rider:delayed_messages', size)
+      RedisDb.redis.set("holy_rider:delayed_messages:#{size}:message", message)
 
       Chat::SendStickerService.call(PLATINUM_STICKER)
+      RedisDb.redis.set("holy_rider:delayed_messages:#{size}:sticker", PLATINUM_STICKER)
     end
 
     private

@@ -24,6 +24,7 @@ module Chat
       player_befriend_all
       top_players_force_update
       top_games_force_update
+      send_delayed_messages
     ].freeze
 
     COMMON_COMMANDS = %w[
