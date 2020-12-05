@@ -25,7 +25,8 @@ module Chat
 
         result = ::Players::CreateService.call(username, trophy_account)
         if trophy_account.present? && result.success?
-          ::Profile::FriendRequestService.call(TrophyHunter.first, trophy_account)
+          ::Profile::FriendRequestService.call(TrophyHunter.first, trophy_account,
+                                               notify_user: true)
         end
         @message = result.success? ? success_response(result.player) : failure_response
       end
