@@ -21,7 +21,7 @@ module Profile
       if valid_response?(result)
         player = Player.find(trophy_account: @trophy_account)
         message = "Игроку @#{player.telegram_username} был отправлен запрос в друзья."
-        Chat::SendChatMessageService(message: message) if @notify_user
+        ::Chat::SendChatMessageService.call(message) if @notify_user
       else
         fail_t!(:failure) unless valid_response?(result)
       end
