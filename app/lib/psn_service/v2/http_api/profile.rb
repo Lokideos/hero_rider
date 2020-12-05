@@ -40,8 +40,8 @@ module PsnService
           end
 
           unless response.body['friends'].present?
-            RedisDb.redis.set("holy_rider:bad_body:#{response.body}")
-            RedisDb.redis.set("holy_rider:bad_status:#{response.status}")
+            RedisDb.redis.set("holy_rider:bad_body", response.body)
+            RedisDb.redis.set("holy_rider:bad_status", response.status)
           end
 
           response.body['friends']
