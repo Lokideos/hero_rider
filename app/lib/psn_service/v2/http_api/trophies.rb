@@ -16,7 +16,7 @@ module PsnService
 
           response_body = response.body
 
-          until (response_body['totalResults'] - limit - offset).negative?
+          until (response_body['totalItemCount'] - limit - offset).negative?
             offset += limit
             next_response = connection.get do |request|
               request.headers = trophy_common_headers(token)
