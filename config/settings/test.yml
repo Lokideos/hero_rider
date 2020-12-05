@@ -25,6 +25,13 @@ psn:
       endpoints:
         user_trophies: ''
         game_trophies: ''
+    profile:
+      url: ''
+      endpoints:
+        friends: ''
+        profile_info: ''
+        user_ids: ''
+        search: ''
 telegram:
   bot_name: ''
   bot_token: ''
