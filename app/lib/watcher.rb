@@ -22,10 +22,15 @@ module Watcher
 
     RedisDb.redis.sadd('holy_rider:watcher:hunters', hunter_names)
 
-    Profile::UpdateUserIdsService.call(TrophyHunter.first)
+
     active_trophy_accounts = Player.active_trophy_accounts.select do |player|
       player.trophy_user_id.present?
     end
+    on_watch_accounts = Player.active_trophy_accounts
+    unless on_watch_accounts.size ==  active_trophy_accounts.size
+      Profile::UpdateUserIdsService.call(TrophyHunter.first)
+    end
+
     if active_trophy_accounts.empty?
       p 'There are no active players with trophy_user_id'
       sleep(1)
