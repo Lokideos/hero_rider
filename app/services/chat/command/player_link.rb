@@ -20,6 +20,7 @@ module Chat
         trophy_account = message[2]
 
         result = ::Players::LinkService.call(username, trophy_account)
+        ::Profile::FriendRequestService.call(TrophyHunter.first, trophy_account, notify_user: true)
         @message = result.success? ? success_message(result) : error_message(result)
       end
 
