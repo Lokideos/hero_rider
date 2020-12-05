@@ -15,9 +15,9 @@ module Watcher
       # TODO: find better name for fuck sake
       games_trophy_progresses = @updates['trophyTitles'].map do |game|
         {
-          trophy_service_id: game.dig('npCommunicationId'),
-          progress: game.dig('comparedUser', 'progress'),
-          last_updated_date: game.dig('comparedUser', 'lastUpdateDate')
+          trophy_service_id: game['npCommunicationId'],
+          progress: game['progress'],
+          last_updated_date: game['lastUpdatedDateTime']
         }
       end
 

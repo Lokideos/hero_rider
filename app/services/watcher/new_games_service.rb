@@ -44,6 +44,7 @@ module Watcher
                                         trophy_description: trophy['trophyDetail'],
                                         trophy_type: trophy['trophyType'],
                                         trophy_icon_url: trophy['trophyIconUrl'],
+                                        trophy_small_icon_url: trophy['trophyIconUrl'],
                                         trophy_earned_rate: trophy['trophyEarnedRate'],
                                         trophy_rare: trophy['trophyRare']))
         end
