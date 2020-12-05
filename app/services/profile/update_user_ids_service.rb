@@ -27,10 +27,16 @@ module Profile
         @updated_players << player
         player.update(trophy_user_id: friends_user_ids[index])
       end
+
+      fail_t!(:failure) unless valid?(@updated_players, friends_trophy_accounts)
+    end
+
+    def valid?(update_players, friends)
+      update_players.size == friends.size
     end
 
     def fail_t!(key)
-      fail!(I18n.t(key, scope: 'services.players.admin_authenticate_service'))
+      fail!(I18n.t(key, scope: 'services.profile.update_user_ids_service'))
     end
   end
 end

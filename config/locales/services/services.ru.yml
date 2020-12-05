@@ -107,3 +107,10 @@ ru:
         refresh_token_failure: 'Не удалось получить refresh_token'
       update_access_token_service:
         failure: 'Не удалось получить access_token'
+    profile:
+      delete_friend_service:
+        failure: 'Не удалось удалить пользователя из друзей'
+      update_user_ids_service:
+        failure: 'Обновление пользователей прошло частично неудачно'
+      friend_request_service:
+        failure: 'Не удалось отправить запрос на добавление пользователя в друзья'
