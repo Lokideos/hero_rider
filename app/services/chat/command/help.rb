@@ -51,6 +51,8 @@ module Chat
         message << '/player_rename [current_player_name] [new_player_name] - меняет имя игрока ' \
                    'в Телеграме'
         message << '/player_destroy [player_name] - удаляет игрока и всю информацию о нем'
+        message << '/player_befriend_all - отправляет запросы в друзья всем активным ' \
+                    'пользователям, которых еще нет в друзьях у бота'
         message << '/players - показывает список зарегистрированных игроков'
 
         @message = [message.join("\n")]

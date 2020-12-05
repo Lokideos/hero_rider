@@ -21,6 +21,7 @@ module Chat
       player_watch_off
       player_rename
       player_destroy
+      player_befriend_all
       top_players_force_update
       top_games_force_update
     ].freeze
