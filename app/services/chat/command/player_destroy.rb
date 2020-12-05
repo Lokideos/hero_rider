@@ -17,6 +17,11 @@ module Chat
 
         message = @command[@message_type]['text'].split(' ')
         username = message[1]
+
+        player = Player.find(telegram_username: username)
+        if player.trophy_account.present?
+          ::Profile::DeleteFriendService.call(TrophyHunter.first, player.trophy_user_id)
+        end
         result = ::Players::DestroyService.call(username)
 
         @message = result.success? ? success_message(result) : error_message(result)
