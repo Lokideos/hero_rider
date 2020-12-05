@@ -20,6 +20,9 @@ psn:
     threads:
       url: ''
   v2:
+    auth:
+      url: ''
+      endpoint: ''
     trophies:
       url: ''
       endpoints:
