@@ -2,7 +2,7 @@
 
 require_relative 'http_api/auth'
 require_relative 'http_api/trophies'
-# require_relative 'http_api/profile'
+require_relative 'http_api/profile'
 # require_relative 'http_api/threads'
 
 module PsnService
@@ -10,7 +10,7 @@ module PsnService
     module HttpApi
       include Auth
       include Trophies
-      # include Profile
+      include Profile
       # include Threads
     end
   end

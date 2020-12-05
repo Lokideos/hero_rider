@@ -109,6 +109,7 @@ Sequel.migration do
       column :refresh_token_expiration, "timestamp without time zone"
       column :created_at, "timestamp without time zone", :null=>false
       column :updated_at, "timestamp without time zone", :null=>false
+      column :trophy_user_id, "text"
       
       index [:client_id], :name=>:trophy_hunters_client_id_key, :unique=>true
       index [:client_secret], :name=>:trophy_hunters_client_secret_key, :unique=>true
