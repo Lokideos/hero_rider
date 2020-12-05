@@ -16,6 +16,7 @@ module Profile
 
       friends_user_ids =
         @client.request_user_ids(token: @hunter.access_token, user_id: @hunter.trophy_user_id)
+      sleep(1)
       friends_trophy_accounts =
         @client.request_users_info(token: @hunter.access_token, account_ids: friends_user_ids)
 
