@@ -25,6 +25,9 @@ psn:
     threads:
       url: <%= ENV.fetch('V1_TROPHY_THREADS_URL') %>
   v2:
+    auth:
+      url: <%= ENV.fetch('V2_TROPHY_AUTH_URL') %>
+      endpoint: <%= ENV.fetch('V2_TROPHY_AUTH_ENDPOINT') %>
     trophies:
       url: <%= ENV.fetch('V2_TROPHY_TROPHIES_URL') %>
       endpoints:
