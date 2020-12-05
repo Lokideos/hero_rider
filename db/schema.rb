@@ -18,6 +18,7 @@ Sequel.migration do
       column :icon_url, "text"
       column :created_at, "timestamp without time zone"
       column :updated_at, "timestamp without time zone"
+      column :trophy_service_source, "text", :default=>"trophy"
       
       index [:title]
       index [:title], :name=>:games_title_trgm_index
