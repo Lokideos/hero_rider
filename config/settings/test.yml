@@ -19,6 +19,12 @@ psn:
       endpoint: ''
     threads:
       url: ''
+  v2:
+    trophies:
+      url: ''
+      endpoints:
+        user_trophies: ''
+        game_trophies: ''
 telegram:
   bot_name: ''
   bot_token: ''

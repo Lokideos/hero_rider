@@ -24,6 +24,12 @@ psn:
       endpoint: <%= ENV.fetch('V1_TROPHY_PROFILE_ENDPOINT') %>
     threads:
       url: <%= ENV.fetch('V1_TROPHY_THREADS_URL') %>
+  v2:
+    trophies:
+      url: <%= ENV.fetch('V2_TROPHY_TROPHIES_URL') %>
+      endpoints:
+        user_trophies: <%= ENV.fetch('V2_TROPHY_TROPHIES_USER_ENDPOINT') %>
+        game_trophies: <%= ENV.fetch('V2_TROPHY_TROPHIES_GAME_ENDPOINT') %>
 telegram:
   bot_name: <%= ENV.fetch('TELEGRAM_BOT_NAME') %>
   bot_token: <%= ENV.fetch('TELEGRAM_BOT_TOKEN') %>
