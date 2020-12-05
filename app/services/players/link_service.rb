@@ -16,7 +16,6 @@ module Players
       @player.update(trophy_account: @trophy_account,
                      message_thread_name: @trophy_account,
                      on_watch: true)
-      RedisDb.redis.sadd('holy_rider:watcher:players', @trophy_account)
       RedisDb.redis.set("holy_rider:watcher:players:initial_load:#{@trophy_account}", 'initial')
     end
 
