@@ -37,6 +37,7 @@ module Watcher
       return
     end
 
+    RedisDb.redis.del('holy_rider:watcher:players')
     RedisDb.redis.sadd('holy_rider:watcher:players', active_trophy_accounts.map(&:trophy_account))
     active_trophy_accounts.each do |player|
       RedisDb.redis.set("holy_rider:watcher:players:#{player.trophy_account}:trophy_user_id",
