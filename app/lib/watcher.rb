@@ -80,6 +80,12 @@ module Watcher
       psn_updates = Psn::TrophyUpdatesService.call(player_name: player, user_id: user_id,
                                                    token: token).result
 
+      if psn_updates[:status] == 403 && psn_updates[:body] == 'Access Denied'
+        message = "Игрок #{player} запретил доступ к своим трофеям."
+        Chat::SendChatMessageService.new(message, chat_id: Settings.telegram.admin_chat_id).call
+        next
+      end
+
       if psn_updates.dig('error', 'message') == 'Access token required'
         p 'Watcher: Refresh token has expired'
         sleep(0.2)

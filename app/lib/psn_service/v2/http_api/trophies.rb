@@ -12,6 +12,10 @@ module PsnService
             request.headers = trophy_common_headers(token)
             request.params = trophy_list_params(limit, offset)
           end
+          if response.status == 403 && response.body.dig('error', 'code') == 2240526
+            return { status: 403, body: 'Access Denied'}
+          end
+
           return response.body unless initial_load
 
           response_body = response.body
