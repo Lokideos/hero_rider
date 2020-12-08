@@ -27,7 +27,9 @@ psn:
   v2:
     auth:
       url: <%= ENV.fetch('V2_TROPHY_AUTH_URL') %>
-      endpoint: <%= ENV.fetch('V2_TROPHY_AUTH_ENDPOINT') %>
+      endpoints:
+        code: <%= ENV.fetch('V2_TROPHY_AUTH_CODE_ENDPOINT') %>
+        token: <%= ENV.fetch('V2_TROPHY_AUTH_TOKEN_ENDPOINT') %>
     trophies:
       url: <%= ENV.fetch('V2_TROPHY_TROPHIES_URL') %>
       endpoints:

@@ -22,7 +22,9 @@ psn:
   v2:
     auth:
       url: ''
-      endpoint: ''
+      endpoints:
+        code: ''
+        token: ''
     trophies:
       url: ''
       endpoints:
