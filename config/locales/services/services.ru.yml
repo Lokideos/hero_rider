@@ -105,7 +105,7 @@ ru:
         failure: "Охотник %{name} не смог пройти аутентификацию"
     psn:
       initial_authentication_service:
-        grant_code_failure: 'Не удалось получить grant_code'
+        auth_code_failure: 'Не удалось получить authorization_code'
         refresh_token_failure: 'Не удалось получить refresh_token'
       update_access_token_service:
         failure: 'Не удалось получить access_token'
