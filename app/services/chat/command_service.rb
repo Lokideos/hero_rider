@@ -103,7 +103,7 @@ module Chat
 
     def send_unauthorized_message
       message = I18n.t(:unauthorized, scope: 'chat')
-      Chat::SendChatMessageService.new(message, chat_id: @current_chat_id).call
+      Chat::SendChatMessageService.new(message, false, @current_chat_id).call
     end
 
     def prepared_command(command)
