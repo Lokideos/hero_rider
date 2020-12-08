@@ -35,7 +35,7 @@ module PsnService
         def request_game_trophy_list(token:, game_id:, trophy_service_source:,
                                      limit: 100, offset: 0)
           endpoint = "#{Settings.psn.v2.trophies.endpoints.game_trophies}/" \
-                      "#{game_id}/trophyGroups/default/trophies"
+                      "#{game_id}/trophyGroups/all/trophies"
 
           response = connection.get(endpoint) do |request|
             request.headers = trophy_common_headers(token)
