@@ -43,7 +43,7 @@ module Watcher
       return unless @player.present?
 
       trophies_list = @client.request_game_player_trophies(
-        user_id: @player.trophy_user_id, token: token, game_id: trophy_service_id,
+        user_id: @player.trophy_user_id, token: token, game_id: @trophy_service_id,
         trophy_service_source: @game.trophy_service_source
       )
 
