@@ -14,11 +14,12 @@ module Watcher
 
     def call
       game_trophies_list = @client.request_game_trophy_list(
-        token: @token, game_id: id, trophy_service_source: game.trophy_service_source
+        token: @token, game_id: @game.trophy_service_id,
+        trophy_service_source: @game.trophy_service_source
       )
       additional_trophies_info = @client.request_game_player_trophies(
-        user_id: @player.trophy_user_id, token: @token, game_id: id,
-        trophy_service_source: game.trophy_service_source
+        user_id: @player.trophy_user_id, token: @token, game_id: @game.trophy_service_id,
+        trophy_service_source: @game.trophy_service_source
       )
       trophies_list = merge_trophies(game_trophies_list, additional_trophies_info)
 
