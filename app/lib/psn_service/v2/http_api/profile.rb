@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# TODO: separate this API module into to different modules
 module PsnService
   module V2
     module HttpApi
@@ -10,7 +11,7 @@ module PsnService
           response = connection.post(endpoint) do |request|
             request.headers = search_for_user_id_headers(token)
             request.body = Oj.dump(
-              search_for_user_id_body(trophy_account, country, language), {mode: :compat}
+              search_for_user_id_body(trophy_account, country, language), { mode: :compat }
             )
           end
 
@@ -40,8 +41,8 @@ module PsnService
           end
 
           unless response.body['friends'].present?
-            RedisDb.redis.set("holy_rider:bad_body", response.body)
-            RedisDb.redis.set("holy_rider:bad_status", response.status)
+            RedisDb.redis.set('holy_rider:bad_body', response.body)
+            RedisDb.redis.set('holy_rider:bad_status', response.status)
           end
 
           response.body['friends']
@@ -76,6 +77,29 @@ module PsnService
           end
 
           response.body['profiles'].map { |profile| profile['onlineId'] }
+        end
+
+        def request_trophy_summary(user_id:, token:)
+          endpoint = "#{Settings.psn.v2.trophies.endpoints.user_trophies}/#{user_id}/trophySummary"
+          response = connection.get(endpoint) do |request|
+            request.headers = profile_common_headers(token)
+          end
+
+          if response.status == 429
+            sleep_increment = 0
+            until response.status != 429
+              p 'Watcher: gateway timeout - too many requests'
+              # TODO: use Fibonacci sequence for 429 status processing
+              sleep_increment += 1
+              sleep(sleep_increment)
+
+              response = connection.get(endpoint) do |request|
+                request.headers = profile_common_headers(token)
+              end
+            end
+          end
+
+          response.body
         end
 
         private
