@@ -16,6 +16,9 @@ module Players
       GameAcquisition.where(player: @player).delete
       @player.update(on_watch: true)
       @player.reload
+      unless @player.trophy_user_id.present?
+        ::Profile::FriendRequestService.call(TrophyHunter.first, @player.trophy_account)
+      end
       RedisDb.redis.set("holy_rider:watcher:players:initial_load:#{@player.trophy_account}",
                         'initial')
       Player.trophy_top_force_update
