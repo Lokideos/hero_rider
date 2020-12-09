@@ -33,9 +33,8 @@ module Watcher
         prepared_psn_dates = psn_game_status_dates.map { |date| Time.parse(date) }
         if prepared_psn_dates.all? { |date| current_game_status_dates.include? date }
           unless hidden_trophies_checked_today?(@player_name)
-            # TODO: return after get ps5 trophies and fix it
-            # Watcher::AddHiddenTrophiesService.call(player_name: @player_name,
-            #                                        hunter_name: @hunter_name)
+            Watcher::AddHiddenTrophiesService.call(player_name: @player_name,
+                                                   hunter_name: @hunter_name)
             RedisDb.redis.setex("holy_rider:watcher:players:hidden_check:#{@player_name}",
                                 SECONDS_IN_DAY,
                                 'checked')
