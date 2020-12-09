@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# TODO: hidden trophy service should be only about hidden trophies -
+# TODO: move gathering of trophy level and progress to separate service
 module Watcher
   class AddHiddenTrophiesService
     prepend BasicService
@@ -16,7 +18,6 @@ module Watcher
       PsnService::V2::HttpClient.new(url: Settings.psn.v2.trophies.url)
     }
 
-    # TODO: return after get ps5 trophies and fix it
     def call
       trophy_summary = @client.request_trophy_summary(user_id: @player.trophy_user_id,
                                                       token: @token)
