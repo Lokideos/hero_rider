@@ -14,7 +14,7 @@ module Watcher
     option :player, default: proc { Player.find(id: @player_id) }
     option :game, default: proc { Game.find(id: @game_id) }
     option :client, default: proc {
-      PsnService::HttpClient.new(url: Settings.psn.game_trophies.url)
+      PsnService::V2::HttpClient.new(url: Settings.psn.v2.trophies.url)
     }
 
     def call
@@ -39,11 +39,13 @@ module Watcher
         hunter.store_access_token(hunter.authenticate)
         token = RedisDb.redis.get("holy_rider:trophy_hunter:#{hunter_name}:access_token")
       end
+      # If player deleted during initial load phase
+      return unless @player.present?
 
-      trophies_list = @client.request_game_trophy_list(player_name: @player.trophy_account,
-                                                       token: token,
-                                                       game_id: @trophy_service_id,
-                                                       extended: true)
+      trophies_list = @client.request_game_player_trophies(
+        user_id: @player.trophy_user_id, token: token, game_id: @trophy_service_id,
+        trophy_service_source: @game.trophy_service_source
+      )
 
       # TODO: here I check for new trophies (typically comes from DLC)
       # TODO: probably should move to separate service altogether
@@ -56,7 +58,7 @@ module Watcher
                                                  new_trophy_ids: new_trophy_ids)
       end
 
-      earned_trophies = trophies_list.select { |trophy| trophy.dig('comparedUser', 'earned') }
+      earned_trophies = trophies_list.select { |trophy| trophy['earned'] }
 
       if @initial_load
         RedisDb.redis.setex(
@@ -79,7 +81,7 @@ module Watcher
           trophy_service_id: trophy['trophyId'],
           trophy_earned_rate: trophy['trophyEarnedRate'],
           trophy_rare: trophy['trophyRare'],
-          earned_at: trophy.dig('comparedUser', 'earnedDate')
+          earned_at: trophy['earnedDateTime']
         }
       end
 
@@ -99,9 +101,9 @@ module Watcher
       new_earned_trophies = new_earned_trophies_ids.map do |trophy_id|
         @game.trophies.find { |trophy| trophy.trophy_service_id == trophy_id }
       end.group_by(&:trophy_type)
-      sorted_new_trophies = TROPHY_TYPES.map do |trophy_type|
+      sorted_new_trophies = TROPHY_TYPES.flat_map do |trophy_type|
         new_earned_trophies[trophy_type]
-      end.flatten.compact
+      end.compact
 
       sorted_new_trophies.each do |trophy|
         trophy_earning_time = earned_trophies_data.find do |trophy_date|

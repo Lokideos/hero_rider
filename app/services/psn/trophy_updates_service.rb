@@ -5,15 +5,17 @@ module Psn
     prepend BasicService
 
     option :player_name
+    option :user_id
     option :token
     option :client, default: proc {
-      PsnService::HttpClient.new(url: Settings.psn.trophies.url)
+      PsnService::V2::HttpClient.new(url: Settings.psn.v2.trophies.url)
     }
 
     attr_reader :result
 
     def call
-      @result = @client.request_trophy_list(player_name: @player_name, token: @token)
+      @result = @client.request_trophy_list(user_id: @user_id, player_name: @player_name,
+                                            token: @token)
     end
   end
 end

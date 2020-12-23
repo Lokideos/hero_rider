@@ -6,15 +6,17 @@ module Psn
 
     param :hunter
     param :sso_cookie
-    option :client, default: proc { PsnService::HttpClient.new }
+    option :client, default: proc { PsnService::V2::HttpClient.new }
 
     def call
-      grant_code_response = @client.request_grant_code(hunter: @hunter, sso_cookie: @sso_cookie)
-      return fail_t!(:grant_code_failure) unless valid_grant_code?(grant_code_response)
+      auth_code_response = @client.request_authorization_code(hunter: @hunter,
+                                                              sso_cookie: @sso_cookie)
+      return fail_t!(:auth_code_failure) unless valid_grant_code?(auth_code_response)
 
-      grant_code = grant_code_response[:grant_code]
+      auth_code = auth_code_response[:authorization_code]
       refresh_token_response = @client.request_refresh_token(hunter: @hunter,
-                                                             grant_code: grant_code)
+                                                             authorization_code: auth_code,
+                                                             sso_cookie: @sso_cookie)
       return fail_t!(:refresh_token_failure) unless valid_response?(refresh_token_response)
 
       refresh_token = refresh_token_response[:refresh_token]
@@ -24,8 +26,8 @@ module Psn
 
     private
 
-    def valid_grant_code?(grant_code_response)
-      grant_code_response[:status] == 302 && grant_code_response[:grant_code].present?
+    def valid_grant_code?(response)
+      response[:status] == 302 && response[:authorization_code].present?
     end
 
     def valid_response?(response)

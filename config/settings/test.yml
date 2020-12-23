@@ -6,18 +6,37 @@ redis:
   db: 3
   sidekiq_db: 4
 psn:
-  auth:
-    url: ''
-  trophies:
-    url: ''
-  game_trophies:
-    url: ''
-    endpoint: ''
-  profile:
-    url: ''
-    endpoint: ''
-  threads:
-    url: ''
+  v1:
+    auth:
+      url: ''
+    trophies:
+      url: ''
+    game_trophies:
+      url: ''
+      endpoint: ''
+    profile:
+      url: ''
+      endpoint: ''
+    threads:
+      url: ''
+  v2:
+    auth:
+      url: ''
+      endpoints:
+        code: ''
+        token: ''
+    trophies:
+      url: ''
+      endpoints:
+        user_trophies: ''
+        game_trophies: ''
+    profile:
+      url: ''
+      endpoints:
+        friends: ''
+        profile_info: ''
+        user_ids: ''
+        search: ''
 telegram:
   bot_name: ''
   bot_token: ''

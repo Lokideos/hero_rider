@@ -18,9 +18,23 @@ module TelegramService
     end
 
     def send_message(chat_id:, message:)
-      connection.post('sendMessage') do |request|
+      response = connection.post('sendMessage') do |request|
         request.body = { chat_id: chat_id, text: message, parse_mode: 'html' }
       end
+
+      if response.status == 429
+        sleep_increment = 0
+        until response.status != 429
+          p 'Chat: gateway timeout - too many requests'
+          sleep_increment += 1
+          sleep(sleep_increment)
+          response = connection.post('sendMessage') do |request|
+            request.body = { chat_id: chat_id, text: message, parse_mode: 'html' }
+          end
+        end
+      end
+
+      response
     end
 
     def delete_message(chat_id:, message_id:)
@@ -30,9 +44,23 @@ module TelegramService
     end
 
     def send_sticker(chat_id:, sticker:)
-      connection.post('sendSticker') do |request|
+      response = connection.post('sendSticker') do |request|
         request.body = { chat_id: chat_id, sticker: sticker }
       end
+
+      if response.status == 429
+        sleep_increment = 0
+        until response.status != 429
+          p 'Chat: gateway timeout - too many requests'
+          sleep_increment += 1
+          sleep(sleep_increment)
+          response = connection.post('sendSticker') do |request|
+            request.body = { chat_id: chat_id, sticker: sticker }
+          end
+        end
+      end
+
+      response
     end
 
     def send_image(chat_id:, filepath:, caption: '')

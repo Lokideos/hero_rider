@@ -8,7 +8,7 @@ module Screenshots
     option :token
     option :sender_name
     option :image_url, default: proc { @message['messageEventDetail']['attachedMediaPath'] }
-    option :client, default: proc { PsnService::HttpClient.new(url: @image_url) }
+    option :client, default: proc { PsnService::V1::HttpClient.new(url: @image_url) }
 
     def call
       image_data = @client.download_image_data(token: @token)

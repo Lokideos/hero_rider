@@ -9,7 +9,7 @@ module Watcher
     option :updates
     option :player, default: proc { Player.find(trophy_account: @player_name) }
     option :client, default: proc {
-      PsnService::HttpClient.new(url: Settings.psn.game_trophies.url)
+      PsnService::V2::HttpClient.new(url: Settings.psn.v2.trophies.url)
     }
 
     def call
@@ -19,25 +19,32 @@ module Watcher
       new_games_trophy_ids.each do |id|
         new_game = @updates['trophyTitles'].find { |game| game['npCommunicationId'] == id }
 
-        extended_trophies_list = @client.request_game_trophy_list(
-          player_name: @player.trophy_account, token: @token, game_id: id, extended: true
-        )
-
         prepared_game_title = prepare_game_title(new_game['trophyTitleName'])
 
-        game = Game.create(trophy_service_id: id, title: prepared_game_title,
-                           platform: new_game['trophyTitlePlatfrom'],
+        game = Game.create(trophy_service_id: id,
+                           title: prepared_game_title,
+                           trophy_service_source: new_game['npServiceName'],
+                           platform: new_game['trophyTitlePlatform'],
                            icon_url: new_game['trophyTitleIconUrl'])
+
+        game_trophies_list = @client.request_game_trophy_list(
+          token: @token, game_id: id, trophy_service_source: game.trophy_service_source
+        )
+        additional_trophies_info = @client.request_game_player_trophies(
+          user_id: @player.trophy_user_id, token: @token, game_id: id,
+          trophy_service_source: game.trophy_service_source
+        )
+        trophies_list = merge_trophies(game_trophies_list, additional_trophies_info)
 
         # TODO: find import (bulk_upload) in sequel and use it to query all trophies to db
         # TODO: It's called import for Christ sake. How didn't I find it before
-        extended_trophies_list.each do |trophy|
+        trophies_list.each do |trophy|
           game.add_trophy(Trophy.create(trophy_name: trophy['trophyName'],
                                         trophy_service_id: trophy['trophyId'],
                                         trophy_description: trophy['trophyDetail'],
                                         trophy_type: trophy['trophyType'],
                                         trophy_icon_url: trophy['trophyIconUrl'],
-                                        trophy_small_icon_url: trophy['trophySmallIconUrl'],
+                                        trophy_small_icon_url: trophy['trophyIconUrl'],
                                         trophy_earned_rate: trophy['trophyEarnedRate'],
                                         trophy_rare: trophy['trophyRare']))
         end
@@ -48,6 +55,14 @@ module Watcher
 
     def prepare_game_title(game_title)
       game_title.gsub(/[\u2122\u00ae\n]/, ' ').gsub(/  /, ' ').strip
+    end
+
+    def merge_trophies(game_trophies, trophies_info)
+      game_trophies.map do |trophy|
+        trophy.merge(
+          trophies_info.find { |trophy_info| trophy_info['trophyId'] == trophy['trophyId'] }
+        )
+      end
     end
   end
 end

@@ -15,6 +15,8 @@ module Players
       return fail_t!(:already_watched_on, name: @username) if @player.on_watch?
 
       @player.update(on_watch: true)
+      RedisDb.redis.set("holy_rider:watcher:players:initial_load:#{@player.trophy_account}",
+                        'initial')
       RedisDb.redis.sadd('holy_rider:watcher:players', @player.trophy_account)
     end
 

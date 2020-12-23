@@ -2,7 +2,7 @@
 
 module Chat
   module Command
-    class PlayerDestroy
+    class PlayerBefriendAll
       prepend BasicService
 
       param :command
@@ -17,21 +17,16 @@ module Chat
 
         message = @command[@message_type]['text'].split(' ')
         username = message[1]
+        trophy_account = message[2]
 
-        player = Player.find(telegram_username: username)
-        if player.trophy_account.present?
-          ::Profile::DeleteFriendService.call(TrophyHunter.first, player.trophy_user_id)
-        end
-        result = ::Players::DestroyService.call(username)
-
-        @message = result.success? ? success_message(result) : error_message(result)
+        result = ::Players::BefriendAllService.call(username, trophy_account)
+        @message = result.success? ? success_message : error_message(result)
       end
 
       private
 
-      def success_message(result)
-        [I18n.t(:success, scope: 'services.command_service.player_destroy',
-                          name: result.player.telegram_username)]
+      def success_message
+        [I18n.t(:success, scope: 'services.command_service.player_befriend_all')]
       end
 
       def error_message(result)

@@ -13,9 +13,9 @@ module Players
       @player = Player.find(telegram_username: @username)
       return fail_t!(:not_found) unless @player.present?
 
-      @player.update(trophy_account: @trophy_account, message_thread_name: @trophy_account)
-      @player.on_watch = true
-      RedisDb.redis.sadd('holy_rider:watcher:players', @trophy_account)
+      @player.update(trophy_account: @trophy_account,
+                     message_thread_name: @trophy_account,
+                     on_watch: true)
       RedisDb.redis.set("holy_rider:watcher:players:initial_load:#{@trophy_account}", 'initial')
     end
 

@@ -5,7 +5,9 @@ module Screenshots
     prepend BasicService
 
     option :token
-    option :client, default: proc { PsnService::HttpClient.new(url: Settings.psn.threads.url) }
+    option :client, default: proc {
+      PsnService::V1::HttpClient.new(url: Settings.psn.v1.threads.url)
+    }
 
     def call
       last_threads = @client.request_message_threads(token: @token)

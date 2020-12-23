@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# TODO: hidden trophy service should be only about hidden trophies -
+# TODO: move gathering of trophy level and progress to separate service
 module Watcher
   class AddHiddenTrophiesService
     prepend BasicService
@@ -13,28 +15,21 @@ module Watcher
       RedisDb.redis.get("holy_rider:trophy_hunter:#{@hunter_name}:access_token")
     }
     option :client, default: proc {
-      PsnService::HttpClient.new(url: Settings.psn.profile.url)
+      PsnService::V2::HttpClient.new(url: Settings.psn.v2.trophies.url)
     }
 
-    # TODO: return after get ps5 trophies and fix it
     def call
-      trophy_summary = @client.request_trophy_summary(player_name: @player_name, token: @token)
-      @player.update(trophy_level: trophy_summary['level'],
+      trophy_summary = @client.request_trophy_summary(user_id: @player.trophy_user_id,
+                                                      token: @token)
+      @player.update(trophy_level: trophy_summary['trophyLevel'],
                      level_up_progress: trophy_summary['progress'])
       return if player_in_initial_load?(@player_name)
 
       @player.delete_hidden_trophies
 
-      # TODO: get rid of instance var get
-      # TODO: return after get ps5 trophies and fix it
       TROPHY_TYPES.each do |trophy_type|
-        instance_variable_set("@hidden_#{trophy_type}_trophies",
-                              trophy_summary['earnedTrophies'][trophy_type] -
-                                @player.all_trophies_by_type(trophy_type).count)
-      end
-
-      TROPHY_TYPES.each do |trophy_type|
-        trophy_type_count = instance_variable_get("@hidden_#{trophy_type}_trophies")
+        trophy_type_count = trophy_summary['earnedTrophies'][trophy_type] -
+                            @player.all_trophies_by_type(trophy_type).count
         save_hidden_trophies(@player, trophy_type, trophy_type_count)
       end
     end

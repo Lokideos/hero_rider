@@ -22,14 +22,27 @@ module Watcher
 
     RedisDb.redis.sadd('holy_rider:watcher:hunters', hunter_names)
 
-    active_trophy_accounts = Player.active_trophy_accounts
+
+    active_trophy_accounts = Player.active_trophy_accounts.select do |player|
+      player.trophy_user_id.present?
+    end
+    on_watch_accounts = Player.active_trophy_accounts
+    unless on_watch_accounts.size ==  active_trophy_accounts.size
+      Profile::UpdateUserIdsService.call(TrophyHunter.first)
+    end
+
     if active_trophy_accounts.empty?
-      p 'There are no players'
+      p 'There are no active players with trophy_user_id'
       sleep(1)
       return
     end
 
-    RedisDb.redis.sadd('holy_rider:watcher:players', active_trophy_accounts)
+    RedisDb.redis.del('holy_rider:watcher:players')
+    RedisDb.redis.sadd('holy_rider:watcher:players', active_trophy_accounts.map(&:trophy_account))
+    active_trophy_accounts.each do |player|
+      RedisDb.redis.set("holy_rider:watcher:players:#{player.trophy_account}:trophy_user_id",
+                        player.trophy_user_id)
+    end
 
     RedisDb.redis.smembers('holy_rider:watcher:players').each do |player|
       if RedisDb.redis.get("holy_rider:watcher:players:initial_load:#{player}") == 'in_progress'
@@ -64,12 +77,20 @@ module Watcher
       end
 
       token = RedisDb.redis.get("holy_rider:trophy_hunter:#{hunter_name}:access_token")
-      psn_updates = Psn::TrophyUpdatesService.call(player_name: player, token: token).result
+      user_id = RedisDb.redis.get("holy_rider:watcher:players:#{player}:trophy_user_id")
+      psn_updates = Psn::TrophyUpdatesService.call(player_name: player, user_id: user_id,
+                                                   token: token).result
 
       if psn_updates.dig('error', 'message') == 'Access token required'
         p 'Watcher: Refresh token has expired'
         sleep(0.2)
         return
+      end
+
+      if psn_updates[:status] == 403 && psn_updates[:body] == 'Access Denied'
+        message = "Игрок #{player} запретил доступ к своим трофеям."
+        Chat::SendChatMessageService.new(message, chat_id: Settings.telegram.admin_chat_id).call
+        next
       end
 
       Watcher::NewGamesService.call(player_name: player, token: token, updates: psn_updates)

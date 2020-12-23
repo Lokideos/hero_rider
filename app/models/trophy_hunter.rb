@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'base64'
 
 class TrophyHunter < Sequel::Model
   DEFAULT_TOKEN_EXPIRATION_TIME = 3500
@@ -39,6 +40,10 @@ class TrophyHunter < Sequel::Model
 
   def active?
     active
+  end
+
+  def authorization_token
+    Base64.encode64("#{client_id}:#{client_secret}").gsub(/\n/, '')
   end
 
   def access_token

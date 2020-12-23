@@ -11,18 +11,37 @@ redis:
   db: <%= ENV.fetch('REDIS_DB') %>
   sidekiq_db: <%= ENV.fetch('REDIS_SIDEKIQ_DB') %>
 psn:
-  auth:
-    url: <%= ENV.fetch('TROPHY_AUTH_URL') %>
-  trophies:
-    url: <%= ENV.fetch('TROPHY_TROPHIES_URL') %>
-  game_trophies:
-    url: <%= ENV.fetch('TROPHY_GAME_TROPHIES_URL') %>
-    endpoint: <%= ENV.fetch('TROPHY_GAME_TROPHIES_ENDPOINT') %>
-  profile:
-    url: <%= ENV.fetch('TROPHY_PROFILE_URL') %>
-    endpoint: <%= ENV.fetch('TROPHY_PROFILE_ENDPOINT') %>
-  threads:
-    url: <%= ENV.fetch('TROPHY_THREADS_URL') %>
+  v1:
+    auth:
+      url: <%= ENV.fetch('V1_TROPHY_AUTH_URL') %>
+    trophies:
+      url: <%= ENV.fetch('V1_TROPHY_TROPHIES_URL') %>
+    game_trophies:
+      url: <%= ENV.fetch('V1_TROPHY_GAME_TROPHIES_URL') %>
+      endpoint: <%= ENV.fetch('V1_TROPHY_GAME_TROPHIES_ENDPOINT') %>
+    profile:
+      url: <%= ENV.fetch('V1_TROPHY_PROFILE_URL') %>
+      endpoint: <%= ENV.fetch('V1_TROPHY_PROFILE_ENDPOINT') %>
+    threads:
+      url: <%= ENV.fetch('V1_TROPHY_THREADS_URL') %>
+  v2:
+    auth:
+      url: <%= ENV.fetch('V2_TROPHY_AUTH_URL') %>
+      endpoints:
+        code: <%= ENV.fetch('V2_TROPHY_AUTH_CODE_ENDPOINT') %>
+        token: <%= ENV.fetch('V2_TROPHY_AUTH_TOKEN_ENDPOINT') %>
+    trophies:
+      url: <%= ENV.fetch('V2_TROPHY_TROPHIES_URL') %>
+      endpoints:
+        user_trophies: <%= ENV.fetch('V2_TROPHY_TROPHIES_USER_ENDPOINT') %>
+        game_trophies: <%= ENV.fetch('V2_TROPHY_TROPHIES_GAME_ENDPOINT') %>
+    profile:
+      url: <%= ENV.fetch('V2_TROPHY_PROFILE_URL') %>
+      endpoints:
+        friends: <%= ENV.fetch('V2_TROPHY_PROFILE_FRIENDS_ENDPOINT') %>
+        profile_info: <%= ENV.fetch('V2_TROPHY_PROFILE_INFO_ENDPOINT') %>
+        user_ids: <%= ENV.fetch('V2_TROPHY_PROFILE_USER_IDS_ENDPOINT') %>
+        search: <%= ENV.fetch('V2_TROPHY_PROFILE_SEARCH_ENDPOINT') %>
 telegram:
   bot_name: <%= ENV.fetch('TELEGRAM_BOT_NAME') %>
   bot_token: <%= ENV.fetch('TELEGRAM_BOT_TOKEN') %>

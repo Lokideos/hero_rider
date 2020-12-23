@@ -21,8 +21,10 @@ module Chat
       player_watch_off
       player_rename
       player_destroy
+      player_befriend_all
       top_players_force_update
       top_games_force_update
+      send_delayed_messages
     ].freeze
 
     COMMON_COMMANDS = %w[
@@ -101,7 +103,7 @@ module Chat
 
     def send_unauthorized_message
       message = I18n.t(:unauthorized, scope: 'chat')
-      Chat::SendChatMessageService.call(chat_id: @current_chat_id, message: message)
+      Chat::SendChatMessageService.new(message, false, @current_chat_id).call
     end
 
     def prepared_command(command)
