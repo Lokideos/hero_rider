@@ -1,5 +1,8 @@
 # frozen_string_literal: true
+
 require 'base64'
+
+class RefreshTokenError < StandardError; end
 
 class TrophyHunter < Sequel::Model
   DEFAULT_TOKEN_EXPIRATION_TIME = 3500
@@ -16,7 +19,10 @@ class TrophyHunter < Sequel::Model
   end
 
   def authenticate
-    Psn::UpdateAccessTokenService.new(self).call.access_token
+    result = Psn::UpdateAccessTokenService.new(self).call
+    raise RefreshTokenError, I18n.t(:refresh_token_error, scope: 'exceptions', hunter_name: name) if result.failure?
+
+    result.access_token
   end
 
   def store_access_token(access_token)
