@@ -89,8 +89,7 @@
         name: hero_rider_watcher
         image: '{{ image }}'
         network_mode: host
-        restart_policy: on-failure
-        restart_retries: 10
+        restart_policy: always
         tty: yes
         env_file: '/home/{{ ansible_user }}/.env'
         command: 'bin/watcher_app'
