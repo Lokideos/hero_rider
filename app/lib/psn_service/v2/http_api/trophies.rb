@@ -4,7 +4,9 @@ module PsnService
   module V2
     module HttpApi
       module Trophies
-        def request_trophy_list(user_id:, player_name:, token:, limit: 100, offset: 0)
+        TROPHY_LIMIT = 200
+
+        def request_trophy_list(user_id:, player_name:, token:, limit: TROPHY_LIMIT, offset: 0)
           endpoint = "#{Settings.psn.v2.trophies.endpoints.user_trophies}/#{user_id}/trophyTitles"
 
           initial_load = RedisDb.redis.get("holy_rider:watcher:players:initial_load:#{player_name}")
@@ -12,8 +14,8 @@ module PsnService
             request.headers = trophy_common_headers(token)
             request.params = trophy_list_params(limit, offset)
           end
-          if response.status == 403 && response.body.dig('error', 'code') == 2240526
-            return { status: 403, body: 'Access Denied'}
+          if response.status == 403 && response.body.dig('error', 'code') == 2_240_526
+            return { status: 403, body: 'Access Denied' }
           end
 
           return response.body unless initial_load
@@ -33,7 +35,7 @@ module PsnService
         end
 
         def request_game_trophy_list(token:, game_id:, trophy_service_source:,
-                                     limit: 100, offset: 0)
+                                     limit: TROPHY_LIMIT, offset: 0)
           endpoint = "#{Settings.psn.v2.trophies.endpoints.game_trophies}/" \
                       "#{game_id}/trophyGroups/all/trophies"
 
@@ -60,7 +62,7 @@ module PsnService
         end
 
         def request_game_player_trophies(user_id:, token:, game_id:, trophy_service_source:,
-                                         limit: 100, offset: 0)
+                                         limit: TROPHY_LIMIT, offset: 0)
           endpoint = "#{Settings.psn.v2.trophies.endpoints.user_trophies}/#{user_id}/" \
                       "npCommunicationIds/#{game_id}/trophyGroups/all/trophies"
 
