@@ -98,7 +98,7 @@ module Watcher
 
       Screenshots::ProcessScreenshotsService.call(token: token)
       p 'Watcher: new screenshots processed'
-    rescue StandardError => e
+    rescue RefreshTokenError => e
       Notifications::SendErrorNotificationService.call(e, false)
     end
 
