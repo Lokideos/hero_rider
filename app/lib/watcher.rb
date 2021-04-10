@@ -86,7 +86,7 @@ module Watcher
 
       if psn_updates[:status] == 403 && psn_updates[:body] == 'Access Denied'
         message = "Игрок #{player} запретил доступ к своим трофеям."
-        Chat::SendChatMessageService.new(message, chat_id: Settings.telegram.admin_chat_id).call
+        Chat::SendChatMessageService.new(message, Settings.telegram.admin_chat_id).call
         next
       end
 
