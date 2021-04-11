@@ -16,7 +16,7 @@ module Watcher
 
       return if @storage.exists?(key: @access_key)
 
-      message = I18n.t('watcher.trophy_access_forbidden', player_name: player)
+      message = I18n.t('watcher.trophy_access_forbidden', player_name: @player_name)
       Chat::SendChatMessageService.new(message, false, @chat_id).call
       @storage.store_for_period(key: @access_key, period: NOTIFY_TIME_INTERVAL, value: 'notification_sent')
     end
