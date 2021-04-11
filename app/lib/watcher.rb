@@ -85,8 +85,7 @@ module Watcher
       end
 
       if psn_updates[:status] == 403 && psn_updates[:body] == 'Access Denied'
-        message = I18n.t('watcher.trophy_access_forbidden', player_name: player)
-        Chat::SendChatMessageService.new(message, false, Settings.telegram.admin_chat_id).call
+        Watcher::NotifyForbiddenStatusService.call(player)
         next
       end
 
