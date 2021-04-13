@@ -4,3 +4,5 @@ ru:
     refresh_token_error: "Истек срок действия refresh token'a для trophy hunter'a '%{hunter_name}'"
   chat:
     unauthorized: 'У вас нет прав для работы с ботом. Обратитесь к админам чата.'
+  watcher:
+    trophy_access_forbidden: 'Игрок %{player_name} запретил доступ к своим трофеям.'
