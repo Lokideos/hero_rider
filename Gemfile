@@ -37,6 +37,4 @@ group :development, :test do
   gem 'fabrication', '~> 2.21.0'
   gem 'rack-test', '~> 1.1.0'
   gem 'database_cleaner-sequel', '~> 1.8.0'
-
-  gem 'rack-unreloader', '~> 1.7.0'
 end
