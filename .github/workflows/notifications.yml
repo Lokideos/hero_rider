@@ -1,0 +1,22 @@
+---
+name: New commit notification
+on:
+  push:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Telegram notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          format: markdown
+          disable_web_page_preview: true
+          message: |
+            Heads up! Hero Rider just get updated!
+            Updates: ${{ github.event.head_commit.message }}
+            Look what [changed](https://github.com/Lokideos/hero_rider/commit/${{ github.sha }})
