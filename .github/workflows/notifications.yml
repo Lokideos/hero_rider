@@ -11,6 +11,8 @@ jobs:
       - uses: actions/checkout@master
       - name: Telegram notification
         uses: appleboy/telegram-action@master
+        env:
+          CHANGES_URL: "https://github.com/Lokideos/hero_rider/commit/${{ github.sha }}"
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -19,4 +21,4 @@ jobs:
           message: |
             Heads up! Hero Rider just get updated!
             Updates: ${{ github.event.head_commit.message }}
-            Look what [changed](https://github.com/Lokideos/hero_rider/commit/${{ github.sha }})
+            Look what [changed]($CHANGES_URL)
