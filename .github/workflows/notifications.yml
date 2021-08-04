@@ -19,4 +19,4 @@ jobs:
           message: |
             Heads up! Hero Rider just get updated!
             Updates: ${{ github.event.head_commit.message }}
-            Look what <a href="https://github.com/Lokideos/underscore_repo/commit/${{ github.sha }}">changed</a>
+            Look what <a href="https://github.com/Lokideos/hero_rider/commit/${{ github.sha }}">changed</a>
