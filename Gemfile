@@ -32,6 +32,7 @@ gem 'pry', '~> 0.13.0'
 
 group :development, :test do
   gem 'pry-byebug', '~> 3.9.0'
+  gem 'rubocop', '0.89.1', require: false
 
   gem 'rspec', '~> 3.9.0'
   gem 'fabrication', '~> 2.21.0'
