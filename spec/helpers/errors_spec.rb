@@ -10,7 +10,7 @@ RSpec.describe Errors, type: :helper do
       attr_reader :response
 
       def initialize
-        @response = Rack::MockResponse.new(404, {}, {})
+        @response = Rack::MockResponse.new(200, {}, {})
       end
     end
   end
@@ -19,7 +19,7 @@ RSpec.describe Errors, type: :helper do
     it 'updates response status to 200' do
       instance_with_errors.not_found_response
 
-      expect(instance_with_errors.response.status).to eq(200)
+      expect(instance_with_errors.response.status).to eq(404)
     end
 
     it 'set response content-type to application/json' do
