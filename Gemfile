@@ -37,4 +37,5 @@ group :development, :test do
   gem 'fabrication', '~> 2.21.0'
   gem 'rack-test', '~> 1.1.0'
   gem 'database_cleaner-sequel', '~> 1.8.0'
+  gem 'rspec_sequel_matchers', '~> 0.5.0'
 end
