@@ -3,7 +3,7 @@ name: New commit to master notification
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build:
