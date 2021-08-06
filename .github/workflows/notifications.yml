@@ -1,7 +1,9 @@
 ---
-name: New commit notification
+name: New commit to master notification
 on:
   push:
+    branches:
+      - main
 
 jobs:
   build:
