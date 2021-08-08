@@ -51,8 +51,8 @@ RSpec.describe ErrorSerializer, type: :serializer do
       double(
         'model',
         errors: {
-          blue: ['не может быть пустым'],
-          green: ['не может быть пустым', 'имеет непредусмотренное значение']
+          blue: ['can not be empty'],
+          green: ['can not be empty', 'has wrong format']
         }
       )
     end
@@ -61,19 +61,19 @@ RSpec.describe ErrorSerializer, type: :serializer do
       expect(serializer.from_model(model)).to eq(
         errors: [
           {
-            detail: %(не может быть пустым),
+            detail: %(can not be empty),
             source: {
               pointer: '/data/attributes/blue'
             }
           },
           {
-            detail: %(не может быть пустым),
+            detail: %(can not be empty),
             source: {
               pointer: '/data/attributes/green'
             }
           },
           {
-            detail: %(имеет непредусмотренное значение),
+            detail: %(has wrong format),
             source: {
               pointer: '/data/attributes/green'
             }
