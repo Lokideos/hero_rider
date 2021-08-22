@@ -95,8 +95,9 @@ module Watcher
                                        hunter_name: hunter_name)
       p "Watcher: player #{player} status checked"
 
-      Screenshots::ProcessScreenshotsService.call(token: token)
-      p 'Watcher: new screenshots processed'
+      # TODO: uncomment after fixing screenshots
+      # Screenshots::ProcessScreenshotsService.call(token: token)
+      # p 'Watcher: new screenshots processed'
     rescue RefreshTokenError => e
       Notifications::SendErrorNotificationService.call(e, false)
     end
