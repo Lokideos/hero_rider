@@ -4,3 +4,9 @@ deploy/*
 screenshots/*
 spec/*
 tmp/*
+
+# Dev files
+Procfile.dev
+bin/env_down
+bin/env_up
+bin/dev
