@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo "Starting up dev environment..."
+
+docker compose --file './docker-compose.yml' up -d
+
+echo "Dev environment is up and running"

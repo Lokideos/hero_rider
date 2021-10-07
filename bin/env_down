@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo "Unloading dev environment..."
+
+docker-compose --file './docker-compose.yml' down
+
+echo "Dev environment unloaded"

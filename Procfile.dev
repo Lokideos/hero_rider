@@ -1,0 +1,4 @@
+web: bin/puma
+sidekiq: sidekiq -r ./config/environment.rb -C ./config/sidekiq/default.yml -c 1
+chat: bin/chat_app
+watcher: bin/watcher_app
