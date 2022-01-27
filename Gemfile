@@ -15,7 +15,7 @@ gem 'pg', '~> 1.2.3'
 gem 'sequel', '~> 5.32.0'
 gem 'redis', '~> 4.2.0'
 
-gem "sidekiq", '~> 6.2.0'
+gem "sidekiq", '~> 6.4.0'
 
 gem 'dry-initializer', '~> 3.0.0'
 gem 'dry-validation', '~> 1.5.0'
