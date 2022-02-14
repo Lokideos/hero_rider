@@ -8,7 +8,7 @@ ruby '2.7.5'
 
 gem 'rake', '~> 13.0.0'
 gem 'roda', '~> 3.34.0'
-gem 'puma', '~> 5.3.1'
+gem 'puma', '~> 5.6.2'
 
 gem 'i18n', '~> 1.8.0'
 gem 'config', '~> 2.2.0'
@@ -17,7 +17,7 @@ gem 'pg', '~> 1.2.3'
 gem 'sequel', '~> 5.32.0'
 gem 'redis', '~> 4.2.0'
 
-gem "sidekiq", '~> 6.2.0'
+gem "sidekiq", '~> 6.4.0'
 
 gem 'dry-initializer', '~> 3.0.0'
 gem 'dry-validation', '~> 1.5.0'
