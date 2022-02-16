@@ -13,6 +13,7 @@
         build:
           path: ../../
           pull: no
+          platform: amd64
         name: '{{ image }}'
         source: build
         force_source: yes
