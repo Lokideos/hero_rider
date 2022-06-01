@@ -9,6 +9,7 @@ ruby '2.7.5'
 gem 'rake', '~> 13.0.0'
 gem 'roda', '~> 3.34.0'
 gem 'puma', '~> 5.6.4'
+gem 'rack', '~> 2.2.3.1'
 
 gem 'i18n', '~> 1.8.0'
 gem 'config', '~> 2.2.0'
