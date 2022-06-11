@@ -25,9 +25,9 @@ gem 'dry-validation', '~> 1.5.0'
 
 gem 'activesupport', '~> 6.0.0', require: false
 
-gem 'faraday', '~> 1.0.0'
-gem 'faraday_middleware', '~> 1.0.0'
-gem "typhoeus", '~> 1.3.0'
+gem 'faraday', '~> 1.10.0'
+gem 'faraday_middleware', '~> 1.2.0'
+gem "typhoeus", '~> 1.4.0'
 
 gem 'oj', '~> 3.10.0'
 gem 'slim', '~> 4.0.0'
