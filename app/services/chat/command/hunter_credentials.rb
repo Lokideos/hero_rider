@@ -19,9 +19,12 @@ module Chat
         result = ::Hunters::GetHunterService.call(name)
 
         @message = if result.success?
-                     [I18n.t(:success, scope: 'services.command_service.hunter_credentials',
-                                       name: result.hunter.name, email: result.hunter.email,
-                                       password: result.hunter.password)]
+                     [
+                       '<b>Name:</b>' + ' ' * 36 + "<code>#{result.hunter.name}</code>\n" \
+                       '<b>Email:</b>' + ' ' * 37 + "<code>#{result.hunter.email}</code>\n" \
+                       "<b>Trophy Service Password:</b> <code>#{result.hunter.password}</code>\n" \
+                       '<b>Email Password:</b>' + ' ' * 18 + "<code>#{result.hunter.email_password}</code>"
+                     ]
                    else
                      [I18n.t(:not_found, scope: 'services.command_service.hunter_credentials',
                                          name: name)]
