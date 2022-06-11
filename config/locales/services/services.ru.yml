@@ -12,7 +12,6 @@ ru:
         not_found: "Охотника с именем %{name} не существует"
         failure: 'Что-то пошло не так'
       hunter_credentials:
-        success: "%{name} credentials: %{email} %{password}"
         not_found: "Охотника с именем %{name} не существует"
       hunter_gear_status:
         success: "Охотник %{name} готов к работе"

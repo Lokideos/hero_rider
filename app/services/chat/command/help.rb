@@ -33,8 +33,8 @@ module Chat
         return @message = [message.join("\n")] unless result.success?
 
         message << '/hunter_stats - показывает текущих охотников за трофеями'
-        message << '/hunter_credentials [hunter_name] - показывает email и пароль охотника'
-        message << '/hunter_gear_up [npsso_cookie] - обновляет refresh token'
+        message << '/hunter_credentials [hunter_name] - показывает email, пароль сервиса и пароль от почты охотника'
+        message << '/hunter_gear_up [hunter_name] [npsso_cookie] - обновляет refresh token'
         message << '/hunter_gear_status [hunter_name] - отображает статус токена охотника'
         message << '/hunter_activate [hunter_name] - охотник начинает обращаться в PSN'
         message << '/hunter_deactivate [hunter_name] - охотник перестает обращаться в PSN'
