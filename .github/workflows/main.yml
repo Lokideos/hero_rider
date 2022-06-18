@@ -48,8 +48,8 @@ jobs:
         run: RACK_ENV=test bundle exec bin/rake db:migrate
       - name: Run specs
         run: bundle exec rspec
-      # Runs a single command using the runners shell
-#      - name: Rubocop Linter Action
-#        uses: andrewmcodes/rubocop-linter-action@v3.3.0
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       Runs a single command using the runners shell
+      - name: Rubocop Linter Action
+        uses: andrewmcodes/rubocop-linter-action@v3.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
