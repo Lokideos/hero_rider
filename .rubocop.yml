@@ -1,8 +1,15 @@
+inherit_from: .rubocop_todo.yml
+inherit_mode:
+  merge:
+    - Exclude
+    - Include
+
 AllCops:
   TargetRubyVersion: 2.7.5
   DisplayCopNames: true
   StyleGuideCopsOnly: false
   Exclude:
+    - 'db/schema.rb'
     - '**/config/**/*'
     - '**/log/**/*'
     - '**/tmp/**/*'
@@ -10,7 +17,7 @@ AllCops:
     - 'Gemfile'
     - 'config.ru'
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
 
 Style/RedundantFetchBlock:
@@ -19,6 +26,9 @@ Style/RedundantFetchBlock:
 Style/FrozenStringLiteralComment:
   Enabled: true
   EnforcedStyle: always
+
+Style/HashSyntax:
+  EnforcedStyle: ruby19
 
 Style/StringLiterals:
   EnforcedStyle: single_quotes

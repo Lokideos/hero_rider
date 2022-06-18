@@ -2,7 +2,7 @@
 
 namespace :db do
   desc 'Seed data into database'
-  task :seed => :settings do
+  task seed: :settings do
     require_relative '../../config/environment'
 
     Sequel.connect(Settings.db.to_hash) do |db|
