@@ -1,0 +1,46 @@
+---
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  specs:
+    env:
+      RUBY_VERSION: 2.7.5
+      RACK_ENV: test
+    runs-on: ubuntu-latest
+    name: Run specs
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: hero_rider_test
+          POSTGRES_USER: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v2
+      - uses:  ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+      - name: Install dependencies
+        run: sudo apt-get install -y build-essential tzdata libpq-dev
+      - name: Rubocop Linter Action
+        uses: andrewmcodes/rubocop-linter-action@v3.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run migrations
+        run: bundle exec bin/rake db:migrate
+      - name: Run specs
+        run: bundle exec rspec
