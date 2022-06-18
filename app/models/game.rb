@@ -124,8 +124,8 @@ class Game < Sequel::Model
         first_trophy_earned_date = TrophyAcquisition
                                    .first_game_acquisition(game_id, progress.player_id)&.earned_at
         OpenStruct.new(
-          trophy_account: progress.values.dig(:trophy_account),
-          progress: progress.values.dig(:progress),
+          trophy_account: progress.values[:trophy_account],
+          progress: progress.values[:progress],
           first_trophy_earned_date: first_trophy_earned_date,
           platinum_earning_date: platinum_earned_date,
           platinum_placement: nil,

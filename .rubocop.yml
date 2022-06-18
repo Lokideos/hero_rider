@@ -5,6 +5,7 @@ inherit_mode:
     - Include
 
 AllCops:
+  NewCops: enable
   TargetRubyVersion: 2.7.5
   DisplayCopNames: true
   StyleGuideCopsOnly: false
