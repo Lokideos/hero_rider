@@ -42,8 +42,8 @@ jobs:
           bundler-cache: true
       - name: Install prerequisites
         run: sudo apt-get install -y build-essential tzdata libpq-dev
-      - name: Create test database
-        run: RACK_ENV=test bundle exec bin/rake db:create
+#      - name: Create test database
+#        run: RACK_ENV=test bundle exec bin/rake db:create
       - name: Run migrations
         run: RACK_ENV=test bundle exec bin/rake db:migrate
       - name: Run specs
