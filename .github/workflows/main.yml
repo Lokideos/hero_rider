@@ -1,3 +1,4 @@
+---
 # This is a basic workflow to help you get started with Actions
 
 name: CI
@@ -16,14 +17,39 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    name: Run specs
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: hero_rider_test
+          POSTGRES_USER: hero_rider
+          POSTGRES_HOST_AUTH_METHOD: trust
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
+      - uses:  ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+      - name: Install prerequisites
+        run: sudo apt-get install -y build-essential tzdata libpq-dev
+      - name: Create test database
+        run: RACK_ENV=test bundle exec bin/rake db:create
+      - name: Run migrations
+        run: RACK_ENV=test bundle exec bin/rake db:migrate
+      - name: Run specs
+        run: bundle exec rspec
       # Runs a single command using the runners shell
-      - name: Rubocop Linter Action
-        uses: andrewmcodes/rubocop-linter-action@v3.3.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Rubocop Linter Action
+#        uses: andrewmcodes/rubocop-linter-action@v3.3.0
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
