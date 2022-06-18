@@ -23,7 +23,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_DB: hero_rider_test
-          POSTGRES_USER: hero_rider
+          POSTGRES_USER: postgres
           POSTGRES_HOST_AUTH_METHOD: trust
         options: >-
           --health-cmd pg_isready
