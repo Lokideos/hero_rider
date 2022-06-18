@@ -1,5 +1,5 @@
 ---
-name: New commit to master notification
+name: New Release Notification
 on:
   workflow_run:
     workflows: ["CI"]
