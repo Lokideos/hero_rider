@@ -54,6 +54,7 @@ module Chat
         message << '/player_befriend_all - отправляет запросы в друзья всем активным ' \
                     'пользователям, которых еще нет в друзьях у бота'
         message << '/players - показывает список зарегистрированных игроков'
+        message << '/set_responsible_for_repairs - назначет ответственного за обновление токена'
         message << '/send_delayed_messages - отправляет отложенные сообщения, если они есть'
 
         @message = [message.join("\n")]
