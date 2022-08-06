@@ -9,10 +9,12 @@ module Notifications
 
     param :exception
     param :repeat_notification
+    option :responsible_for_repair, default: proc { ResponsibleForRepair.order_by(:updated_at).last }
     option :admin_chat_id, default: proc { Settings.telegram.admin_chat_id }
 
     def call
-      message = "#log #error #{@exception.message}"
+      repairman_username = @responsible_for_repair.player.telegram_username
+      message = "#log #error @#{repairman_username} #{@exception.message}"
 
       return if repeat_lock_exists?
 
