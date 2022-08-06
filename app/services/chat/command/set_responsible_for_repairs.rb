@@ -2,7 +2,6 @@
 
 module Chat
   module Command
-    # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
     class SetResponsibleForRepairs
       prepend BasicService
 
@@ -39,6 +38,5 @@ module Chat
         [I18n.t(:failure, scope: 'services.command_service.set_responsible_for_repairs')]
       end
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
   end
 end
