@@ -59,6 +59,13 @@ Sequel.migration do
       index [:trophy_account], :name=>:players_trophy_account_key, :unique=>true
     end
     
+    create_table(:responsible_for_repairs) do
+      primary_key :id
+      column :player_id, "integer"
+      column :created_at, "timestamp without time zone"
+      column :updated_at, "timestamp without time zone"
+    end
+    
     create_table(:schema_info) do
       column :version, "integer", :default=>0, :null=>false
     end
