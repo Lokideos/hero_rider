@@ -23,7 +23,7 @@ gem "sidekiq", '~> 6.4.0'
 gem 'dry-initializer', '~> 3.0.0'
 gem 'dry-validation', '~> 1.5.0'
 
-gem 'activesupport', '~> 6.0.0', require: false
+gem 'activesupport', '~> 6.1.0', require: false
 
 gem 'faraday', '~> 1.10.0'
 gem 'faraday_middleware', '~> 1.2.0'
