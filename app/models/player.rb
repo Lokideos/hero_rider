@@ -41,6 +41,7 @@ class Player < Sequel::Model
   many_to_many :trophies, left_key: :player_id, right_key: :trophy_id,
                           join_table: :trophy_acquisitions
   one_to_many :message_thread
+  one_to_many :responsible_for_repairs
 
   def validate
     super

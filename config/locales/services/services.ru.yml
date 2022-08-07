@@ -40,6 +40,10 @@ ru:
         success: "Теперь трофеи игрока %{name} отслеживаются"
       player_befriend_all:
         success: 'Всем пользователям, которых нет в друзьях бота, отправлены приглашения'
+      set_responsible_for_repairs:
+        success: "@%{username} назначен ответственным за поддержку"
+        player_not_provided: 'Пожалуйста, введите ник нового ответственного за поддержку'
+        failure: 'Что-то пошло не так'
       top:
         header: 'Топ трофеев:'
       top_rare:
@@ -87,6 +91,9 @@ ru:
         already_pinged_off: 'Оповещения о новых трофеях уже выключены'
       trophy_ping_on_service:
         already_pinged_on: 'Оповещения о новых трофеях уже включены'
+    responsible_for_repairs:
+      create_service:
+        not_found: 'Игрок не найден'
     hunters:
       activate_hunter_service:
         not_found: 'Охотник с таким именем не найден'
