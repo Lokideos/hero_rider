@@ -9,10 +9,9 @@ module Chat
     sleep(0.5)
     new_messages = chat_updates
 
-    # check_messages_for_deletion
     check_messages_for_deletion
     unless new_messages.any?
-      p 'No updates'
+      CustomLogger.info(I18n.t(:no_updates, scope: 'logs.lib.chat'))
       return
     end
 
@@ -21,7 +20,7 @@ module Chat
 
     store_last_processed_message(new_messages.last['update_id'])
 
-    p 'End of interaction'
+    CustomLogger.info(I18n.t(:end_of_interaction, scope: 'logs.lib.chat'))
   end
 
   private

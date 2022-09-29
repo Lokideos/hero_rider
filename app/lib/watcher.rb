@@ -15,7 +15,7 @@ module Watcher
     hunters = TrophyHunter.active_hunters
     hunter_names = hunters.map(&:name)
     if hunter_names.empty?
-      p 'There are no hunters'
+      CustomLogger.warn(I18n.t(:no_hunters, scope: 'logs.lib.watcher'))
       sleep(1)
       return
     end
@@ -29,7 +29,7 @@ module Watcher
     Profile::UpdateUserIdsService.call(TrophyHunter.first) unless on_watch_accounts.size == active_trophy_accounts.size
 
     if active_trophy_accounts.empty?
-      p 'There are no active players with trophy_user_id'
+      CustomLogger.warn(I18n.t(:no_active_trophy_accounts, scope: 'logs.lib.watcher'))
       sleep(1)
       return
     end
@@ -43,7 +43,7 @@ module Watcher
 
     RedisDb.redis.smembers('holy_rider:watcher:players').each do |player|
       if RedisDb.redis.get("holy_rider:watcher:players:initial_load:#{player}") == 'in_progress'
-        p "Watcher: player #{player} is still in the initial load phase."
+        CustomLogger.info(I18n.t(:player_in_initial_phase, scope: 'logs.lib.watcher', player: player))
         sleep(0.2)
         next
       end
@@ -55,7 +55,7 @@ module Watcher
         end
 
         unless hunter_name
-          p 'Watcher: all hunters are tainted at the moment'
+          CustomLogger.warn(I18n.t(:all_hunters_tainted, scope: 'logs.lib.watcher'))
           sleep(1)
         end
       end
@@ -79,7 +79,7 @@ module Watcher
                                                    token: token).result
 
       if psn_updates.dig('error', 'message') == 'Access token required'
-        p 'Watcher: Refresh token has expired'
+        CustomLogger.warn(I18n.t(:refresh_token_expired, scope: 'logs.lib.watcher'))
         sleep(0.2)
         return
       end
@@ -93,7 +93,7 @@ module Watcher
       Watcher::LinkGamesService.call(player_name: player, updates: psn_updates)
       Watcher::NewTrophiesService.call(player_name: player, updates: psn_updates,
                                        hunter_name: hunter_name)
-      p "Watcher: player #{player} status checked"
+      CustomLogger.info(I18n.t(:player_status_checked, scope: 'logs.lib.watcher', player: player))
 
       # TODO: uncomment after fixing screenshots
       # Screenshots::ProcessScreenshotsService.call(token: token)
@@ -102,6 +102,6 @@ module Watcher
       Notifications::SendErrorNotificationService.call(e, false)
     end
 
-    p 'Watcher: all players checked'
+    CustomLogger.info(I18n.t(:all_players_statuses_checked, scope: 'logs.lib.watcher'))
   end
 end

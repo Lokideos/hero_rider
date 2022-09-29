@@ -1,0 +1,28 @@
+en:
+  logs:
+    services:
+      watcher:
+        process_trophies_list_service:
+          all_hunters_tainted: Watcher | All hunters are tainted. Waiting...
+    lib:
+      chat:
+        end_of_interaction: Chat | End of interaction
+        no_updates: Chat | No updates
+      psn_service:
+        v1:
+          http_api:
+            too_many_requests: Watcher | Gateway timeout - too many requests
+        v2:
+          http_api:
+            too_many_requests: Watcher | Gateway timeout - too many requests
+      telegram_service:
+        http_api:
+          too_many_requests: Chat | Gateway timeout - too many requests
+      watcher:
+        refresh_token_expired: Watcher | Refresh token has expired
+        no_hunters: Watcher | There are no hunters
+        no_active_trophy_accounts: Watcher | There are no active players with trophy_user_id
+        all_hunters_tainted:  Watcher | All hunters are tainted at the moment
+        player_in_initial_phase: Watcher | Player %{player} is still in the initial load phase.
+        player_status_checked: Watcher | Player %{player} status checked
+        all_players_statuses_checked: Watcher | All players checked
