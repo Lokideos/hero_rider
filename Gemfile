@@ -33,6 +33,8 @@ gem 'oj', '~> 3.10.0'
 gem 'slim', '~> 4.0.0'
 gem 'pry', '~> 0.13.0'
 
+gem 'logging', '~> 2.3.0'
+
 group :development, :test do
   gem 'pry-byebug', '~> 3.9.0'
   gem 'rubocop', '0.89.1', require: false
