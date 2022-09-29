@@ -55,7 +55,7 @@ module Watcher
         end
 
         unless hunter_name
-          CustomLogger.warn(I18n.t(:all_hunters_tainted, scope: 'logs.lib.watcher'))
+          CustomLogger.info(I18n.t(:all_hunters_tainted, scope: 'logs.lib.watcher'))
           sleep(1)
         end
       end
