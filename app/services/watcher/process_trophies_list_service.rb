@@ -24,7 +24,7 @@ module Watcher
           !RedisDb.redis.exists?("holy_rider:watcher:hunters:#{name}:trophy_queue:tainted")
         end
         unless hunter_name
-          p 'Watcher: All hunters are tainted. Waiting...'
+          CustomLogger.info(I18n.t(:all_hunters_tainted, scope: 'logs.services.watcher.process_trophies_list_service'))
           sleep(1)
         end
       end

@@ -25,7 +25,7 @@ module TelegramService
       if response.status == 429
         sleep_increment = 0
         until response.status != 429
-          p 'Chat: gateway timeout - too many requests'
+          CustomLogger.warn(I18n.t(:too_many_requests, scope: 'logs.lib.telegram_service.http_api'))
           sleep_increment += 1
           sleep(sleep_increment)
           response = connection.post('sendMessage') do |request|
@@ -51,7 +51,7 @@ module TelegramService
       if response.status == 429
         sleep_increment = 0
         until response.status != 429
-          p 'Chat: gateway timeout - too many requests'
+          CustomLogger.warn(I18n.t(:too_many_requests, scope: 'logs.lib.telegram_service.http_api'))
           sleep_increment += 1
           sleep(sleep_increment)
           response = connection.post('sendSticker') do |request|

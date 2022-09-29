@@ -30,7 +30,7 @@ module PsnService
             # TODO: use Fibonacci sequence for 429 status processing
             sleep_increment = 0
             until response.status != 429
-              p 'Watcher: gateway timeout - too many requests'
+              CustomLogger.warn('Watcher: gateway timeout - too many requests')
               sleep_increment += 1
               sleep(sleep_increment)
               response = connection.get(endpoint) do |request|
@@ -88,7 +88,7 @@ module PsnService
           if response.status == 429
             sleep_increment = 0
             until response.status != 429
-              p 'Watcher: gateway timeout - too many requests'
+              CustomLogger.warn('Watcher: gateway timeout - too many requests')
               # TODO: use Fibonacci sequence for 429 status processing
               sleep_increment += 1
               sleep(sleep_increment)
