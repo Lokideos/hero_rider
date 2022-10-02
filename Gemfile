@@ -45,3 +45,7 @@ group :development, :test do
   gem 'database_cleaner-sequel', '~> 1.8.0'
   gem 'rspec_sequel_matchers', '~> 0.5.0'
 end
+
+group :test do
+  gem 'mock_redis', '~> 0.34.0'
+end
