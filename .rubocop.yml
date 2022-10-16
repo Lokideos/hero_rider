@@ -18,6 +18,10 @@ AllCops:
     - 'Gemfile'
     - 'config.ru'
 
+Metrics/BlockLength:
+  Exclude:
+    - '**/spec/**/*'
+
 Layout/LineLength:
   Max: 120
 

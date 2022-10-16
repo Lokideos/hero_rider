@@ -12,4 +12,8 @@ Dir[Application.root.concat('/spec/support/**/*.rb')].each { |f| require f }
 RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.include RspecSequel::Matchers
+
+  config.before(:each) do
+    RedisDb.redis.flushdb
+  end
 end
