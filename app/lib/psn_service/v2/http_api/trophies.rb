@@ -92,6 +92,8 @@ module PsnService
           {
             'Authorization' => "Bearer #{token}",
             'Accept-Language' => 'en-GB',
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
             'User-Agent' => 'okhttp/13.4.3'
           }
         end
