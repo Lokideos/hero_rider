@@ -12,6 +12,7 @@ module Chat
       hunter_gear_status
       hunter_gear_up
       hunter_activate
+      hunter_change_service_password
       hunter_deactivate
       player_add
       player_link
