@@ -17,3 +17,9 @@ deploy/hosts
 
 # Ignore local docker-compose file
 docker-compose.yml
+
+# Ignore local overcommit settings
+.overcommit.yml
+
+# Ignore local hunspell dictionaries
+.hunspell/
