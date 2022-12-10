@@ -82,3 +82,6 @@ Style/RedundantRegexpEscape:
 
 Style/SlicingWithRange:
   Enabled: true
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
