@@ -98,6 +98,10 @@ ru:
       activate_hunter_service:
         not_found: 'Охотник с таким именем не найден'
         failure: 'Что-то пошло не так'
+      change_service_password_service:
+        missing_password: 'Новый пароль не может быть пустым'
+        not_found: 'Охотник с таким именем не найден'
+        failure: 'Что-то пошло не так'
       deactivate_hunter_service:
         not_found: 'Охотник с таким именем не найден'
         failure: 'Что-то пошло не так'

@@ -37,6 +37,8 @@ module Chat
         message << '/hunter_gear_up [hunter_name] [npsso_cookie] - обновляет refresh token'
         message << '/hunter_gear_status [hunter_name] - отображает статус токена охотника'
         message << '/hunter_activate [hunter_name] - охотник начинает обращаться в PSN'
+        message << '/hunter_change_service_password [hunter_name] [new_password] - ' \
+                   'меняет пароль для входа в PSN для охотника'
         message << '/hunter_deactivate [hunter_name] - охотник перестает обращаться в PSN'
         message << '/top_players_force_update - переформирует кэш топа трофеев игроков'
         message << '/top_games_force_update - переформирует кэш топов игр - может занять ' \

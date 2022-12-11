@@ -15,7 +15,7 @@ module Players
     end
 
     def valid?(player)
-      player.admin?
+      player&.admin?
     end
 
     def fail_t!(key)
