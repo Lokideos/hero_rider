@@ -48,10 +48,6 @@ class TrophyHunter < Sequel::Model
     active
   end
 
-  def authorization_token
-    Base64.encode64("#{client_id}:#{client_secret}").gsub(/\n/, '')
-  end
-
   def access_token
     RedisDb.redis.get("holy_rider:trophy_hunter:#{name}:access_token")
   end
