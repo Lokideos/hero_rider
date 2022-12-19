@@ -12,7 +12,7 @@ module PsnService
             request.body = {
               'token_format': 'jwt',
               'grant_type': 'refresh_token',
-              'scope': 'psn:mobile.v1 psn:clientapp',
+              'scope': 'psn:mobile.v2.core psn:clientapp',
               'refresh_token': hunter.refresh_token,
             }
           end
@@ -41,9 +41,9 @@ module PsnService
               'elements_visibility': 'no_aclink',
               'extraQueryParams': '{PlatformPrivacyWs1 = minimal;}',
               'no_captcha': 'true',
-              'redirect_uri': 'com.playstation.PlayStationApp://redirect',
+              'redirect_uri': 'com.scee.psxandroid.scecompcall://redirect',
               'response_type': 'code',
-              'scope': 'psn:mobile.v1 psn:clientapp',
+              'scope': 'psn:mobile.v2.core psn:clientapp',
               'service_entity': 'urn:service-entity:psn',
               'smcid': 'psapp:settings-entrance',
               'support_scheme': 'sneiprls',
@@ -71,7 +71,7 @@ module PsnService
               'service_logo': 'ps',
               'ui': 'pr',
               'elements_visibility': 'no_aclink',
-              'redirect_uri': 'com.playstation.PlayStationApp://redirect',
+              'redirect_uri': 'com.scee.psxandroid.scecompcall://redirect',
               'support_scheme': 'sneiprls',
               'grant_type': 'authorization_code',
               'darkmode': 'true',
